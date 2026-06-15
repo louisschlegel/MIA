@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'Archivo', system-ui, sans-serif; -webkit-font-smoothing: antialiased; background: #07080a; }
+  .mia-scroll::-webkit-scrollbar { width: 0; height: 0; }
+  .mia-scroll { scrollbar-width: none; }
+  input[type=range].mia-range { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 99px; outline: none; }
+  input[type=range].mia-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 26px; height: 26px; border-radius: 50%; background: #cdfb45; border: 4px solid #11140a; cursor: pointer; box-shadow: 0 4px 14px rgba(205,251,69,.5); }
+  input[type=range].mia-range::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #cdfb45; border: 4px solid #11140a; cursor: pointer; }
+  @keyframes miaPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: .85; } }
+  @keyframes miaGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(205,251,69,.45); } 50% { box-shadow: 0 0 0 12px rgba(205,251,69,0); } }
+  @keyframes miaUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes miaSpin { to { transform: rotate(360deg); } }
+  @keyframes miaBlink { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+  @keyframes miaBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; width: 100%; background: radial-gradient(120% 80% at 50% -10%, #14180d 0%, #0a0b0c 45%, #07080a 100%); display: flex; align-items: center; justify-content: center; padding: 32px 16px; position: relative; overflow: hidden;">
+
+  <div style="position: absolute; top: 40px; left: 40px; display: flex; align-items: center; gap: 10px; z-index: 1;">
+    <div style="width: 34px; height: 34px; border-radius: 10px; background: #cdfb45; display: flex; align-items: center; justify-content: center;">
+      <i data-lucide="zap" style="width: 19px; height: 19px; color: #11140a;"></i>
+    </div>
+    <div>
+      <div style="font-weight: 900; letter-spacing: .14em; color: #f2f5ea; font-size: 15px;">MIA</div>
+      <div style="font-family: 'Space Mono', monospace; font-size: 9px; color: #6b7060; letter-spacing: .12em;">PROTOTYPE · LIA AI</div>
+    </div>
+  </div>
+
+  <button onClick="{{ resetOnboarding }}" style="position: absolute; top: 44px; right: 40px; z-index: 1; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); color: #9aa08b; font-family: 'Space Mono', monospace; font-size: 11px; padding: 8px 14px; border-radius: 99px; cursor: pointer; display: flex; align-items: center; gap: 7px;" style-hover="background: rgba(255,255,255,.08); color: #f2f5ea;">
+    <i data-lucide="rotate-ccw" style="width: 13px; height: 13px;"></i> Rejouer l'onboarding
+  </button>
+
+  <!-- PHONE -->
+  <div style="position: relative; width: 390px; height: 838px; background: #0c0e0a; border-radius: 52px; padding: 11px; box-shadow: 0 0 0 2px #1c1f15, 0 40px 90px -20px rgba(0,0,0,.8), 0 0 120px -30px rgba(205,251,69,.25); z-index: 2;">
+    <div style="position: relative; width: 100%; height: 100%; background: #0a0b08; border-radius: 42px; overflow: hidden;">
+
+      <!-- status bar -->
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 52px; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 28px 8px; z-index: 40; pointer-events: none;">
+        <span style="font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700; color: #f2f5ea;">7:24</span>
+        <div style="position: absolute; left: 50%; top: 9px; transform: translateX(-50%); width: 104px; height: 30px; background: #000; border-radius: 99px;"></div>
+        <div style="display: flex; align-items: center; gap: 6px; color: #f2f5ea;">
+          <i data-lucide="signal" style="width: 16px; height: 16px;"></i>
+          <i data-lucide="wifi" style="width: 16px; height: 16px;"></i>
+          <i data-lucide="battery-full" style="width: 22px; height: 16px;"></i>
+        </div>
+      </div>
+
+      <!-- SCREEN AREA -->
+      <div id="miaScroll" class="mia-scroll" style="position: absolute; inset: 0; overflow-y: auto; padding-bottom: 100px;">
+
+        <!-- ===================== TODAY ===================== -->
+        <sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+        <div style="padding: 64px 20px 0;">
+
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;">
+            <div>
+              <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: .14em; color: #cdfb45; margin-bottom: 4px;">{{ user.dateLabel }}</div>
+              <div style="font-size: 27px; font-weight: 900; color: #f2f5ea; letter-spacing: -.02em; line-height: 1;">Salut, {{ user.name }}</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 5px; background: rgba(255,107,61,.12); border: 1px solid rgba(255,107,61,.3); padding: 7px 11px; border-radius: 99px;">
+                <i data-lucide="flame" style="width: 15px; height: 15px; color: #ff6b3d;"></i>
+                <span style="font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px; color: #ff6b3d;">{{ user.streak }}</span>
+              </div>
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #cdfb45, #8fbf2e); display: flex; align-items: center; justify-content: center; font-weight: 900; color: #11140a; font-size: 16px;">{{ user.initials }}</div>
+            </div>
+          </div>
+
+          <!-- LIA proactive card -->
+          <div style="position: relative; background: linear-gradient(135deg, rgba(205,251,69,.14), rgba(205,251,69,.04)); border: 1px solid rgba(205,251,69,.32); border-radius: 22px; padding: 18px; margin-bottom: 16px; overflow: hidden; animation: miaUp .5s ease both;">
+            <div style="position: absolute; top: -30px; right: -30px; width: 110px; height: 110px; border-radius: 50%; background: radial-gradient(circle, rgba(205,251,69,.25), transparent 70%);"></div>
+            <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 11px;">
+              <div style="width: 28px; height: 28px; border-radius: 9px; background: #cdfb45; display: flex; align-items: center; justify-content: center; animation: miaPulse 2.4s ease-in-out infinite;">
+                <i data-lucide="sparkles" style="width: 16px; height: 16px; color: #11140a;"></i>
+              </div>
+              <span style="font-weight: 800; font-size: 13px; color: #cdfb45; letter-spacing: .03em;">LIA · suggestion du jour</span>
+              <span style="margin-left: auto; font-family: 'Space Mono', monospace; font-size: 10px; color: #7c8a4f; border: 1px solid rgba(205,251,69,.25); padding: 3px 7px; border-radius: 6px;">{{ toneLabel }}</span>
+            </div>
+            <p style="margin: 0 0 14px; font-size: 15px; line-height: 1.45; color: #eef3e2;">{{ liaCardText }}</p>
+            <div style="display: flex; gap: 8px;">
+              <button onClick="{{ startSession }}" style="flex: 1; background: #cdfb45; color: #11140a; border: none; font-weight: 800; font-size: 13px; padding: 11px; border-radius: 12px; cursor: pointer;" style-hover="background: #d9ff5e;">C'est parti</button>
+              <button onClick="{{ goLia }}" style="background: rgba(255,255,255,.05); color: #cdd3c2; border: 1px solid rgba(255,255,255,.12); font-weight: 700; font-size: 13px; padding: 11px 16px; border-radius: 12px; cursor: pointer;" style-hover="background: rgba(255,255,255,.1);">Ajuster</button>
+            </div>
+          </div>
+
+          <!-- readiness -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+            <sc-for list="{{ readiness }}" as="r" hint-placeholder-count="3">
+              <div style="background: #12150d; border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 13px 11px;">
+                <i data-lucide="{{ r.icon }}" style="width: 17px; height: 17px; color: #cdfb45; margin-bottom: 9px;"></i>
+                <div style="font-family: 'Space Mono', monospace; font-size: 19px; font-weight: 700; color: #f2f5ea; line-height: 1;">{{ r.value }}</div>
+                <div style="font-size: 11px; color: #7d836f; margin-top: 4px;">{{ r.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- today's session -->
+          <div style="position: relative; background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 20px; margin-bottom: 16px; overflow: hidden;">
+            <div style="position: absolute; inset: 0; background: linear-gradient(110deg, transparent 55%, rgba(205,251,69,.06)); pointer-events: none;"></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+              <span style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: .14em; color: #7d836f;">SÉANCE DU JOUR</span>
+              <span style="display: flex; align-items: center; gap: 5px; font-size: 11px; color: #cdfb45; font-weight: 700;"><i data-lucide="clock" style="width: 13px; height: 13px;"></i> {{ todaySession.duration }} min</span>
+            </div>
+            <div style="font-size: 30px; font-weight: 900; color: #f2f5ea; letter-spacing: -.02em; line-height: 1; margin-bottom: 5px;">{{ todaySession.title }}</div>
+            <div style="font-size: 13px; color: #9aa08b; margin-bottom: 16px;">{{ todaySession.subtitle }} · {{ todaySession.count }} exercices</div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+              <sc-for list="{{ exercisePreview }}" as="ex" hint-placeholder-count="3">
+                <div style="display: flex; align-items: center; gap: 11px;">
+                  <div style="width: 30px; height: 30px; border-radius: 9px; background: rgba(205,251,69,.1); display: flex; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: #cdfb45;">{{ ex.num }}</div>
+                  <span style="flex: 1; font-size: 14px; color: #e7ecd9; font-weight: 600;">{{ ex.name }}</span>
+                  <span style="font-family: 'Space Mono', monospace; font-size: 12px; color: #7d836f;">{{ ex.sets }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <button onClick="{{ startSession }}" style="width: 100%; background: #cdfb45; color: #11140a; border: none; font-weight: 900; font-size: 16px; letter-spacing: .02em; padding: 15px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; animation: miaGlow 2.6s ease-in-out infinite;" style-hover="background: #d9ff5e;">
+              <i data-lucide="play" style="width: 18px; height: 18px;"></i> DÉMARRER LA SÉANCE
+            </button>
+          </div>
+
+          <!-- week activity -->
+          <div style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 18px 20px; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+              <span style="font-weight: 800; font-size: 14px; color: #f2f5ea;">Ta semaine</span>
+              <span style="font-family: 'Space Mono', monospace; font-size: 12px; color: #cdfb45;">3 / 5 séances</span>
+            </div>
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 72px; gap: 8px;">
+              <sc-for list="{{ weekBars }}" as="b" hint-placeholder-count="7">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end;">
+                  <div style="{{ b.style }}"></div>
+                  <span style="font-family: 'Space Mono', monospace; font-size: 11px; color: {{ b.labelColor }};">{{ b.d }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- nutrition teaser tile -->
+          <button onClick="{{ goNutrition }}" style="width: 100%; text-align: left; background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 18px; padding: 16px 18px; cursor: pointer; display: flex; align-items: center; gap: 14px;" style-hover="border-color: rgba(205,251,69,.3);">
+            <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(255,107,61,.12); display: flex; align-items: center; justify-content: center;"><i data-lucide="utensils" style="width: 20px; height: 20px; color: #ff6b3d;"></i></div>
+            <div style="flex: 1;">
+              <div style="font-weight: 800; font-size: 14px; color: #f2f5ea;">Nutrition du jour</div>
+              <div style="font-size: 12px; color: #7d836f;">1 840 / 2 200 kcal · 128g protéines</div>
+            </div>
+            <i data-lucide="chevron-right" style="width: 18px; height: 18px; color: #7d836f;"></i>
+          </button>
+
+        </div>
+        </sc-if>
+
+        <!-- ===================== STUBS (enriched next) ===================== -->
+        <sc-if value="{{ isLia }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 62px 18px 180px;">
+          <!-- LIA header -->
+          <div style="display: flex; align-items: center; gap: 12px; padding: 8px 4px 18px; border-bottom: 1px solid rgba(255,255,255,.06); margin-bottom: 18px;">
+            <div style="position: relative; width: 46px; height: 46px; border-radius: 15px; background: linear-gradient(135deg, #cdfb45, #a6d636); display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="sparkles" style="width: 24px; height: 24px; color: #11140a;"></i>
+              <div style="position: absolute; bottom: -1px; right: -1px; width: 13px; height: 13px; border-radius: 50%; background: #38e06a; border: 3px solid #0a0b08;"></div>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-size: 18px; font-weight: 900; color: #f2f5ea; letter-spacing: -.01em;">LIA</div>
+              <div style="font-size: 12px; color: #8d927e;">En ligne · ton <span style="color: #cdfb45; font-weight: 700;">{{ toneLabel }}</span></div>
+            </div>
+            <button onClick="{{ goProfile }}" style="width: 36px; height: 36px; border-radius: 11px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="sliders-horizontal" style="width: 17px; height: 17px; color: #9aa08b;"></i></button>
+          </div>
+
+          <!-- messages -->
+          <sc-for list="{{ chat }}" as="m" hint-placeholder-count="2">
+            <div style="{{ m.rowStyle }}">
+              <sc-if value="{{ m.isLia }}" hint-placeholder-val="{{ true }}">
+                <div style="width: 28px; height: 28px; border-radius: 9px; background: #cdfb45; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"><i data-lucide="sparkles" style="width: 15px; height: 15px; color: #11140a;"></i></div>
+              </sc-if>
+              <div style="{{ m.bubbleStyle }}">{{ m.text }}</div>
+            </div>
+          </sc-for>
+
+          <sc-if value="{{ typing }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; align-items: flex-end; gap: 8px; margin-bottom: 14px;">
+            <div style="width: 28px; height: 28px; border-radius: 9px; background: #cdfb45; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"><i data-lucide="sparkles" style="width: 15px; height: 15px; color: #11140a;"></i></div>
+            <div style="background: #161a11; border: 1px solid rgba(255,255,255,.07); padding: 14px 16px; border-radius: 18px 18px 18px 5px; display: flex; gap: 5px;">
+              <div style="width: 7px; height: 7px; border-radius: 50%; background: #cdfb45; animation: miaBlink 1s ease infinite;"></div>
+              <div style="width: 7px; height: 7px; border-radius: 50%; background: #cdfb45; animation: miaBlink 1s ease .2s infinite;"></div>
+              <div style="width: 7px; height: 7px; border-radius: 50%; background: #cdfb45; animation: miaBlink 1s ease .4s infinite;"></div>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+        </sc-if>
+        <sc-if value="{{ isProgress }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 62px 20px 0;">
+          <div style="font-size: 27px; font-weight: 900; color: #f2f5ea; letter-spacing: -.02em; margin-bottom: 4px;">Tes progrès</div>
+          <div style="font-size: 13px; color: #8d927e; margin-bottom: 20px;">Bloc Force · semaine 3 sur 8</div>
+
+          <!-- volume hero -->
+          <div style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 20px; margin-bottom: 14px;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 18px;">
+              <div style="min-width: 0;">
+                <div style="font-size: 12px; color: #7d836f; margin-bottom: 6px; white-space: nowrap;">Volume · cette semaine</div>
+                <div style="font-family: 'Space Mono', monospace; font-size: 30px; font-weight: 700; color: #f2f5ea; line-height: 1;">14,2 <span style="font-size: 15px; color: #7d836f;">t</span></div>
+              </div>
+              <div style="flex-shrink: 0; display: flex; align-items: center; gap: 4px; background: rgba(205,251,69,.12); padding: 5px 9px; border-radius: 8px;"><i data-lucide="trending-up" style="width: 13px; height: 13px; color: #cdfb45;"></i><span style="font-size: 12px; font-weight: 700; color: #cdfb45;">+12%</span></div>
+            </div>
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 90px; gap: 7px;">
+              <sc-for list="{{ volumeBars }}" as="b" hint-placeholder-count="8">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; height: 100%; justify-content: flex-end;">
+                  <div style="{{ b.style }}"></div>
+                  <span style="font-family: 'Space Mono', monospace; font-size: 9px; color: {{ b.labelColor }};">{{ b.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- weight trend -->
+          <div style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 20px; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+              <span style="font-weight: 800; font-size: 14px; color: #f2f5ea;">Poids de corps</span>
+              <span style="font-family: 'Space Mono', monospace; font-size: 13px; color: #cdfb45;">78,3 kg · −3,7</span>
+            </div>
+            <svg viewBox="0 0 320 96" style="width: 100%; height: 96px; display: block;">
+              <defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cdfb45" stop-opacity=".35"/><stop offset="1" stop-color="#cdfb45" stop-opacity="0"/></linearGradient></defs>
+              <polygon points="{{ weightArea }}" fill="url(#wg)"></polygon>
+              <polyline points="{{ weightLine }}" fill="none" stroke="#cdfb45" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </div>
+
+          <!-- records -->
+          <div style="font-weight: 800; font-size: 15px; color: #f2f5ea; margin: 6px 2px 12px;">Records personnels</div>
+          <div style="display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px;">
+            <sc-for list="{{ records }}" as="r" hint-placeholder-count="4">
+              <div style="display: flex; align-items: center; gap: 13px; background: #12150d; border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 14px 16px;">
+                <div style="width: 38px; height: 38px; border-radius: 11px; background: rgba(205,251,69,.1); display: flex; align-items: center; justify-content: center;"><i data-lucide="{{ r.icon }}" style="width: 19px; height: 19px; color: #cdfb45;"></i></div>
+                <span style="flex: 1; font-weight: 600; font-size: 14px; color: #e7ecd9;">{{ r.name }}</span>
+                <div style="text-align: right;">
+                  <div style="font-family: 'Space Mono', monospace; font-weight: 700; font-size: 16px; color: #f2f5ea;">{{ r.value }}</div>
+                  <div style="font-size: 11px; color: #cdfb45; font-weight: 700;">{{ r.delta }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- badges -->
+          <div style="font-weight: 800; font-size: 15px; color: #f2f5ea; margin: 6px 2px 12px;">Succès</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 9px; margin-bottom: 10px;">
+            <sc-for list="{{ badges }}" as="b" hint-placeholder-count="4">
+              <div style="{{ b.boxStyle }}">
+                <i data-lucide="{{ b.icon }}" style="width: 22px; height: 22px; color: {{ b.iconColor }};"></i>
+                <span style="font-size: 10px; font-weight: 600; color: {{ b.txtColor }}; text-align: center; line-height: 1.2;">{{ b.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ isProgram }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 62px 20px 0;">
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 18px;">
+            <div>
+              <div style="font-size: 27px; font-weight: 900; color: #f2f5ea; letter-spacing: -.02em;">Ton programme</div>
+              <div style="font-size: 13px; color: #8d927e; margin-top: 2px;">Juin 2026</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; background: rgba(205,251,69,.1); border: 1px solid rgba(205,251,69,.25); padding: 7px 11px; border-radius: 10px;"><i data-lucide="sparkles" style="width: 14px; height: 14px; color: #cdfb45;"></i><span style="font-size: 12px; font-weight: 700; color: #cdfb45;">Adapté par LIA</span></div>
+          </div>
+
+          <!-- block progress -->
+          <div style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 20px; padding: 18px; margin-bottom: 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <span style="font-weight: 800; font-size: 14px; color: #f2f5ea;">Bloc Force</span>
+              <span style="font-family: 'Space Mono', monospace; font-size: 12px; color: #cdfb45;">Semaine 3 / 8</span>
+            </div>
+            <div style="height: 8px; border-radius: 99px; background: rgba(255,255,255,.07); overflow: hidden;"><div style="width: 37.5%; height: 100%; border-radius: 99px; background: linear-gradient(90deg,#9fd232,#cdfb45);"></div></div>
+          </div>
+
+          <!-- week strip -->
+          <div style="display: flex; gap: 7px; margin-bottom: 18px;">
+            <sc-for list="{{ weekStrip }}" as="w" hint-placeholder-count="7">
+              <div style="{{ w.style }}">
+                <span style="font-family: 'Space Mono', monospace; font-size: 11px; color: {{ w.dColor }};">{{ w.d }}</span>
+                <span style="font-size: 16px; font-weight: {{ w.nWeight }}; color: {{ w.nColor }};">{{ w.n }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- sessions -->
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <sc-for list="{{ programDays }}" as="p" hint-placeholder-count="6">
+              <div style="{{ p.cardStyle }}">
+                <div style="width: 44px; height: 44px; border-radius: 13px; background: {{ p.iconBg }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="{{ p.icon }}" style="width: 21px; height: 21px; color: {{ p.iconColor }};"></i></div>
+                <div style="flex: 1;">
+                  <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: .1em; color: #7d836f; margin-bottom: 2px;">{{ p.day }}</div>
+                  <div style="font-weight: 800; font-size: 15px; color: {{ p.titleColor }};">{{ p.title }}</div>
+                  <div style="font-size: 12px; color: #7d836f;">{{ p.sub }}</div>
+                </div>
+                <sc-if value="{{ p.tag }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 9px; font-weight: 800; letter-spacing: .08em; color: {{ p.tagColor }}; border: 1px solid {{ p.tagColor }}; padding: 4px 7px; border-radius: 7px;">{{ p.tag }}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ isNutrition }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 62px 20px 0;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+            <button onClick="{{ goToday }}" style="width: 38px; height: 38px; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="chevron-left" style="width: 20px; height: 20px; color: #9aa08b;"></i></button>
+            <div>
+              <div style="font-size: 22px; font-weight: 900; color: #f2f5ea; letter-spacing: -.02em;">Nutrition</div>
+              <div style="font-size: 12px; color: #8d927e;">Lundi 15 juin</div>
+            </div>
+          </div>
+
+          <!-- calories ring -->
+          <div style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 22px; margin-bottom: 14px; display: flex; align-items: center; gap: 22px;">
+            <div style="position: relative; width: 120px; height: 120px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+              <div style="{{ calRing }}"></div>
+              <div style="text-align: center;">
+                <div style="font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; color: #f2f5ea; line-height: 1;">1840</div>
+                <div style="font-size: 10px; color: #7d836f;">/ 2200 kcal</div>
+              </div>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 13px;">
+              <sc-for list="{{ macros }}" as="m" hint-placeholder-count="3">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span style="font-size: 12px; font-weight: 600; color: #cdd3c2;">{{ m.label }}</span>
+                    <span style="font-family: 'Space Mono', monospace; font-size: 11px; color: #7d836f;">{{ m.val }} / {{ m.target }}g</span>
+                  </div>
+                  <div style="height: 7px; border-radius: 99px; background: rgba(255,255,255,.06); overflow: hidden;"><div style="{{ m.barStyle }}"></div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- LIA suggestion -->
+          <div style="background: linear-gradient(135deg, rgba(205,251,69,.13), rgba(205,251,69,.03)); border: 1px solid rgba(205,251,69,.28); border-radius: 18px; padding: 16px; margin-bottom: 16px; display: flex; gap: 12px; align-items: flex-start;">
+            <div style="width: 30px; height: 30px; border-radius: 9px; background: #cdfb45; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"><i data-lucide="sparkles" style="width: 17px; height: 17px; color: #11140a;"></i></div>
+            <div>
+              <div style="font-size: 11px; font-weight: 800; color: #cdfb45; margin-bottom: 3px;">LIA · CONSEIL NUTRITION</div>
+              <p style="margin: 0; font-size: 13px; line-height: 1.45; color: #e7ecd9;">Il te reste 32g de protéines pour atteindre ta cible. Ajoute un Skyr ou 120g de blanc de poulet au dîner.</p>
+            </div>
+          </div>
+
+          <!-- meals -->
+          <div style="font-weight: 800; font-size: 15px; color: #f2f5ea; margin: 4px 2px 12px;">Repas du jour</div>
+          <div style="display: flex; flex-direction: column; gap: 9px; margin-bottom: 14px;">
+            <sc-for list="{{ meals }}" as="m" hint-placeholder-count="4">
+              <div style="display: flex; align-items: center; gap: 13px; background: #12150d; border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 14px 16px;">
+                <div style="width: 40px; height: 40px; border-radius: 12px; background: {{ m.iconBg }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="{{ m.icon }}" style="width: 20px; height: 20px; color: {{ m.iconColor }};"></i></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="display: flex; align-items: center; gap: 8px; white-space: nowrap;"><span style="font-weight: 700; font-size: 14px; color: #f2f5ea;">{{ m.name }}</span><span style="font-family: 'Space Mono', monospace; font-size: 10px; color: #7d836f;">{{ m.time }}</span></div>
+                  <div style="font-size: 12px; color: #7d836f; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ m.items }}</div>
+                </div>
+                <div style="text-align: right; flex-shrink: 0;">
+                  <div style="font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px; color: #e7ecd9;">{{ m.kcal }}</div>
+                  <i data-lucide="{{ m.check }}" style="width: 16px; height: 16px; color: {{ m.checkColor }};"></i>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- water -->
+          <div style="background: #12150d; border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 14px;">
+            <i data-lucide="droplets" style="width: 22px; height: 22px; color: #5ec8ff;"></i>
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="font-size: 13px; font-weight: 600; color: #cdd3c2;">Hydratation</span><span style="font-family: 'Space Mono', monospace; font-size: 12px; color: #7d836f;">1,6 / 2,5 L</span></div>
+              <div style="height: 7px; border-radius: 99px; background: rgba(255,255,255,.06); overflow: hidden;"><div style="width: 64%; height: 100%; border-radius: 99px; background: #5ec8ff;"></div></div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 62px 20px 0;">
+          <!-- header -->
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <div style="width: 66px; height: 66px; border-radius: 22px; background: linear-gradient(135deg, #cdfb45, #8fbf2e); display: flex; align-items: center; justify-content: center; font-weight: 900; color: #11140a; font-size: 26px;">M</div>
+            <div style="flex: 1;">
+              <div style="font-size: 22px; font-weight: 900; color: #f2f5ea; letter-spacing: -.01em;">Marco Lefèvre</div>
+              <div style="display: flex; align-items: center; gap: 7px; margin-top: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: #cdfb45; background: rgba(205,251,69,.1); padding: 3px 8px; border-radius: 6px;">Intermédiaire</span>
+                <span style="font-size: 12px; color: #8d927e;">Membre depuis mars 2025</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- stats -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px;">
+            <sc-for list="{{ profileStats }}" as="s" hint-placeholder-count="3">
+              <div style="background: #12150d; border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 15px 10px; text-align: center;">
+                <div style="font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; color: #f2f5ea; line-height: 1;">{{ s.v }}</div>
+                <div style="font-size: 11px; color: #7d836f; margin-top: 5px;">{{ s.l }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- LIA personality control -->
+          <div style="background: #12150d; border: 1px solid rgba(205,251,69,.2); border-radius: 20px; padding: 20px; margin-bottom: 18px;">
+            <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 16px;">
+              <div style="width: 30px; height: 30px; border-radius: 9px; background: #cdfb45; display: flex; align-items: center; justify-content: center;"><i data-lucide="sparkles" style="width: 17px; height: 17px; color: #11140a;"></i></div>
+              <div style="flex: 1;">
+                <div style="font-weight: 800; font-size: 14px; color: #f2f5ea;">Personnalité de LIA</div>
+                <div style="font-size: 12px; color: #8d927e;">Comment ton coach te parle</div>
+              </div>
+              <span style="font-size: 14px; font-weight: 900; color: #cdfb45;">{{ toneLabel }}</span>
+            </div>
+            <input type="range" class="mia-range" min="0" max="100" value="{{ tone }}" onInput="{{ onTone }}" style="{{ rangeStyle }}" />
+            <div style="display: flex; justify-content: space-between; font-size: 10px; font-family: 'Space Mono', monospace; color: #7d836f; margin-top: 10px;"><span>BIENVEILLANT</span><span>INTENSE</span></div>
+            <div style="margin-top: 16px; background: rgba(205,251,69,.06); border-radius: 12px; padding: 12px; font-size: 13px; line-height: 1.45; color: #e7ecd9; font-style: italic;">« {{ toneSample }} »</div>
+          </div>
+
+          <!-- premium plan -->
+          <div style="position: relative; background: linear-gradient(120deg, #cdfb45, #a6d636); border-radius: 20px; padding: 18px 20px; margin-bottom: 18px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;"><i data-lucide="crown" style="width: 20px; height: 20px; color: #11140a;"></i><span style="font-weight: 900; font-size: 16px; color: #11140a;">Mia Premium</span></div>
+            <p style="margin: 0; font-size: 13px; color: #1f2a0c; line-height: 1.4; max-width: 240px;">Programmes illimités, coaching LIA en temps réel et analyses avancées.</p>
+          </div>
+
+          <!-- settings -->
+          <div style="background: #12150d; border: 1px solid rgba(255,255,255,.06); border-radius: 18px; overflow: hidden; margin-bottom: 12px;">
+            <sc-for list="{{ settings }}" as="s" hint-placeholder-count="5">
+              <button style="width: 100%; display: flex; align-items: center; gap: 13px; padding: 15px 16px; background: none; border: none; border-bottom: 1px solid rgba(255,255,255,.04); cursor: pointer;" style-hover="background: rgba(255,255,255,.02);">
+                <i data-lucide="{{ s.icon }}" style="width: 19px; height: 19px; color: #9aa08b;"></i>
+                <span style="flex: 1; text-align: left; font-size: 14px; font-weight: 600; color: #e7ecd9;">{{ s.label }}</span>
+                <span style="font-size: 13px; color: #7d836f;">{{ s.val }}</span>
+                <i data-lucide="chevron-right" style="width: 17px; height: 17px; color: #5f6553;"></i>
+              </button>
+            </sc-for>
+          </div>
+
+          <button onClick="{{ resetOnboarding }}" style="width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); color: #9aa08b; font-weight: 600; font-size: 13px; padding: 13px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;" style-hover="background: rgba(255,255,255,.07);"><i data-lucide="rotate-ccw" style="width: 15px; height: 15px;"></i> Rejouer l'onboarding</button>
+        </div>
+        </sc-if>
+
+      </div>
+
+      <!-- BOTTOM NAV -->
+      <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 88px; background: linear-gradient(transparent, #0a0b08 30%); display: flex; align-items: center; justify-content: space-around; padding: 0 18px 18px; z-index: 30;">
+        <button onClick="{{ goToday }}" style="background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px;">
+          <i data-lucide="house" style="width: 23px; height: 23px; color: {{ navToday }};"></i>
+          <span style="font-size: 9px; font-weight: 700; color: {{ navToday }};">Accueil</span>
+        </button>
+        <button onClick="{{ goProgram }}" style="background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px;">
+          <i data-lucide="calendar-days" style="width: 23px; height: 23px; color: {{ navProgram }};"></i>
+          <span style="font-size: 9px; font-weight: 700; color: {{ navProgram }};">Programme</span>
+        </button>
+        <button onClick="{{ goLia }}" style="background: none; border: none; cursor: pointer; margin-top: -22px; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+          <div style="width: 56px; height: 56px; border-radius: 19px; background: linear-gradient(135deg, #cdfb45, #a6d636); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 22px -4px rgba(205,251,69,.6);" style-hover="transform: translateY(-2px);">
+            <i data-lucide="sparkles" style="width: 26px; height: 26px; color: #11140a;"></i>
+          </div>
+          <span style="font-size: 9px; font-weight: 800; color: {{ navLia }};">LIA</span>
+        </button>
+        <button onClick="{{ goProgress }}" style="background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px;">
+          <i data-lucide="trending-up" style="width: 23px; height: 23px; color: {{ navProgress }};"></i>
+          <span style="font-size: 9px; font-weight: 700; color: {{ navProgress }};">Progrès</span>
+        </button>
+        <button onClick="{{ goProfile }}" style="background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px;">
+          <i data-lucide="user-round" style="width: 23px; height: 23px; color: {{ navProfile }};"></i>
+          <span style="font-size: 9px; font-weight: 700; color: {{ navProfile }};">Profil</span>
+        </button>
+      </div>
+
+      <!-- LIA input dock (fixed above nav) -->
+      <sc-if value="{{ isLia }}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; bottom: 84px; left: 0; right: 0; z-index: 35; background: linear-gradient(transparent, #0a0b08 22%); padding: 18px 14px 8px;">
+        <div class="mia-scroll" style="display: flex; gap: 8px; overflow-x: auto; margin-bottom: 11px; padding-bottom: 2px;">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.onClick }}" style="flex-shrink: 0; display: flex; align-items: center; gap: 6px; background: rgba(205,251,69,.08); border: 1px solid rgba(205,251,69,.25); color: #cdfb45; font-size: 12px; font-weight: 600; padding: 8px 13px; border-radius: 99px; cursor: pointer; white-space: nowrap;" style-hover="background: rgba(205,251,69,.16);">
+              <i data-lucide="{{ c.icon }}" style="width: 13px; height: 13px;"></i> {{ c.label }}
+            </button>
+          </sc-for>
+        </div>
+        <div style="display: flex; align-items: center; gap: 9px; background: #14160f; border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 7px 7px 7px 16px;">
+          <input value="{{ input }}" onInput="{{ onChatInput }}" onKeyDown="{{ onChatKey }}" placeholder="Pose ta question à LIA…" style="flex: 1; background: none; border: none; outline: none; color: #f2f5ea; font-family: 'Archivo', sans-serif; font-size: 14px;" />
+          <button onClick="{{ send }}" style="width: 40px; height: 40px; border-radius: 12px; background: #cdfb45; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;" style-hover="background: #d9ff5e;"><i data-lucide="arrow-up" style="width: 20px; height: 20px; color: #11140a;"></i></button>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ===================== ONBOARDING OVERLAY ===================== -->
+      <sc-if value="{{ onboarding }}" hint-placeholder-val="{{ true }}">
+      <div style="position: absolute; inset: 0; z-index: 60; background: radial-gradient(120% 70% at 50% 0%, #1a2010 0%, #0a0b08 55%); display: flex; flex-direction: column; padding: 64px 26px 30px;">
+
+        <div style="display: flex; gap: 7px; margin-bottom: 40px;">
+          <sc-for list="{{ obDots }}" as="d" hint-placeholder-count="3">
+            <div style="flex: 1; height: 4px; border-radius: 99px; background: {{ d.color }};"></div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ isOb0 }}" hint-placeholder-val="{{ true }}">
+        <div style="flex: 1; display: flex; flex-direction: column; animation: miaUp .5s ease both;">
+          <div style="width: 64px; height: 64px; border-radius: 20px; background: #cdfb45; display: flex; align-items: center; justify-content: center; margin-bottom: 28px;"><i data-lucide="zap" style="width: 34px; height: 34px; color: #11140a;"></i></div>
+          <div style="font-size: 40px; font-weight: 900; color: #f2f5ea; letter-spacing: -.03em; line-height: .98; margin-bottom: 16px;">Ton coach<br>ne dort<br>jamais.</div>
+          <p style="font-size: 16px; line-height: 1.5; color: #9aa08b; margin: 0;">Mia, c'est <span style="color: #cdfb45; font-weight: 700;">LIA</span> — une intelligence qui suit chaque rep, adapte ton programme et te pousse au bon moment. Pas un planning figé. Un vrai coach, dans ta poche.</p>
+          <div style="flex: 1;"></div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isOb1 }}" hint-placeholder-val="{{ false }}">
+        <div style="flex: 1; display: flex; flex-direction: column; animation: miaUp .4s ease both;">
+          <div style="font-size: 13px; font-family: 'Space Mono', monospace; letter-spacing: .14em; color: #cdfb45; margin-bottom: 10px;">OBJECTIF</div>
+          <div style="font-size: 30px; font-weight: 900; color: #f2f5ea; letter-spacing: -.02em; line-height: 1.02; margin-bottom: 24px;">Qu'est-ce qu'on vise ?</div>
+          <div style="display: flex; flex-direction: column; gap: 11px;">
+            <sc-for list="{{ goalsView }}" as="g" hint-placeholder-count="4">
+              <button onClick="{{ g.onClick }}" style="{{ g.style }}">
+                <div style="width: 42px; height: 42px; border-radius: 12px; background: {{ g.iconBg }}; display: flex; align-items: center; justify-content: center;"><i data-lucide="{{ g.icon }}" style="width: 21px; height: 21px; color: {{ g.iconColor }};"></i></div>
+                <div style="flex: 1; text-align: left;">
+                  <div style="font-weight: 800; font-size: 15px; color: #f2f5ea;">{{ g.label }}</div>
+                  <div style="font-size: 12px; color: #8d927e;">{{ g.desc }}</div>
+                </div>
+                <i data-lucide="{{ g.check }}" style="width: 20px; height: 20px; color: {{ g.iconColor }};"></i>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isOb2 }}" hint-placeholder-val="{{ false }}">
+        <div style="flex: 1; display: flex; flex-direction: column; animation: miaUp .4s ease both;">
+          <div style="font-size: 13px; font-family: 'Space Mono', monospace; letter-spacing: .14em; color: #cdfb45; margin-bottom: 10px;">PERSONNALITÉ DE LIA</div>
+          <div style="font-size: 30px; font-weight: 900; color: #f2f5ea; letter-spacing: -.02em; line-height: 1.02; margin-bottom: 8px;">Comment LIA te parle ?</div>
+          <p style="font-size: 14px; color: #8d927e; margin: 0 0 30px;">Tu peux la régler à tout moment. Du soutien bienveillant au coach qui ne te lâche rien.</p>
+
+          <div style="background: #12150d; border: 1px solid rgba(205,251,69,.2); border-radius: 22px; padding: 24px 20px;">
+            <div style="text-align: center; margin-bottom: 22px;">
+              <div style="font-size: 44px; font-weight: 900; color: #cdfb45; letter-spacing: -.02em; line-height: 1;">{{ toneLabel }}</div>
+            </div>
+            <div style="position: relative; padding: 0 4px; margin-bottom: 14px;">
+              <input type="range" class="mia-range" min="0" max="100" value="{{ tone }}" onInput="{{ onTone }}" style="{{ rangeStyle }}" />
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px; font-family: 'Space Mono', monospace; color: #7d836f;">
+              <span>BIENVEILLANT</span><span>INTENSE</span>
+            </div>
+            <div style="margin-top: 22px; background: rgba(205,251,69,.06); border-radius: 14px; padding: 14px; display: flex; gap: 10px; align-items: flex-start;">
+              <i data-lucide="quote" style="width: 16px; height: 16px; color: #cdfb45; flex-shrink: 0; margin-top: 2px;"></i>
+              <p style="margin: 0; font-size: 14px; line-height: 1.45; color: #e7ecd9; font-style: italic;">{{ toneSample }}</p>
+            </div>
+          </div>
+          <div style="flex: 1;"></div>
+        </div>
+        </sc-if>
+
+        <button onClick="{{ obNext }}" style="width: 100%; background: #cdfb45; color: #11140a; border: none; font-weight: 900; font-size: 17px; padding: 16px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: 20px;" style-hover="background: #d9ff5e;">
+          {{ obCta }} <i data-lucide="arrow-right" style="width: 19px; height: 19px;"></i>
+        </button>
+      </div>
+      </sc-if>
+
+      <!-- ===================== LIVE SESSION OVERLAY ===================== -->
+      <sc-if value="{{ sessActive }}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; z-index: 70; background: #0a0b08; display: flex; flex-direction: column;">
+
+        <!-- session header -->
+        <div style="padding: 60px 22px 14px; display: flex; align-items: center; justify-content: space-between;">
+          <button onClick="{{ finishSession }}" style="width: 38px; height: 38px; border-radius: 12px; background: rgba(255,255,255,.06); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="x" style="width: 20px; height: 20px; color: #f2f5ea;"></i></button>
+          <div style="text-align: center;">
+            <div style="font-family: 'Space Mono', monospace; font-size: 11px; color: #7d836f; letter-spacing: .1em;">TEMPS TOTAL</div>
+            <div style="font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: #f2f5ea;">{{ elapsedLabel }}</div>
+          </div>
+          <div style="width: 38px; height: 38px; border-radius: 12px; background: rgba(255,107,61,.14); display: flex; align-items: center; justify-content: center;"><i data-lucide="flame" style="width: 18px; height: 18px; color: #ff6b3d;"></i></div>
+        </div>
+
+        <!-- progress dots -->
+        <div style="padding: 0 22px 16px; display: flex; gap: 5px;">
+          <sc-for list="{{ sessDots }}" as="d" hint-placeholder-count="6">
+            <div style="flex: 1; height: 4px; border-radius: 99px; background: {{ d.color }};"></div>
+          </sc-for>
+        </div>
+
+        <!-- exercise -->
+        <div style="flex: 1; padding: 8px 22px; display: flex; flex-direction: column;">
+          <div style="font-family: 'Space Mono', monospace; font-size: 12px; color: #cdfb45; letter-spacing: .12em; margin-bottom: 6px;">EXERCICE {{ exNum }} / {{ exTotal }}</div>
+          <div style="font-size: 32px; font-weight: 900; color: #f2f5ea; letter-spacing: -.02em; line-height: 1; margin-bottom: 18px;">{{ curEx.name }}</div>
+
+          <!-- big rep counter -->
+          <div style="position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px;">
+            <sc-if value="{{ resting }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align: center; animation: miaUp .3s ease both;">
+              <div style="font-family: 'Space Mono', monospace; font-size: 13px; color: #cdfb45; letter-spacing: .14em; margin-bottom: 6px;">RÉCUPÉRATION</div>
+              <div style="font-family: 'Space Mono', monospace; font-size: 88px; font-weight: 700; color: #f2f5ea; line-height: 1; letter-spacing: -.03em;">{{ restLabel }}</div>
+              <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                <button onClick="{{ addRest }}" style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); color: #cdd3c2; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 12px; cursor: pointer;">+20s</button>
+                <button onClick="{{ skipRest }}" style="background: #cdfb45; border: none; color: #11140a; font-weight: 800; font-size: 13px; padding: 10px 22px; border-radius: 12px; cursor: pointer;">Passer</button>
+              </div>
+            </div>
+            </sc-if>
+            <sc-if value="{{ notResting }}" hint-placeholder-val="{{ true }}">
+            <div style="text-align: center;">
+              <div style="position: relative; width: 210px; height: 210px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                <div style="position: absolute; inset: 0; border-radius: 50%; border: 6px solid rgba(255,255,255,.06);"></div>
+                <div style="{{ repRingStyle }}"></div>
+                <div>
+                  <div style="font-family: 'Space Mono', monospace; font-size: 76px; font-weight: 700; color: #cdfb45; line-height: 1;">{{ curReps }}</div>
+                  <div style="font-family: 'Space Mono', monospace; font-size: 14px; color: #7d836f;">/ {{ curEx.repsTarget }} reps</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 16px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #ff6b3d; animation: miaBlink 1s ease infinite;"></div>
+                <span style="font-size: 12px; color: #9aa08b; font-weight: 600;">LIA compte tes répétitions</span>
+              </div>
+            </div>
+            </sc-if>
+          </div>
+
+          <!-- set info -->
+          <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+            <div style="flex: 1; background: #12150d; border: 1px solid rgba(255,255,255,.06); border-radius: 14px; padding: 13px; text-align: center;">
+              <div style="font-family: 'Space Mono', monospace; font-size: 20px; font-weight: 700; color: #f2f5ea;">{{ setNum }} / {{ curEx.setsTotal }}</div>
+              <div style="font-size: 11px; color: #7d836f; margin-top: 3px;">Série</div>
+            </div>
+            <div style="flex: 1; background: #12150d; border: 1px solid rgba(255,255,255,.06); border-radius: 14px; padding: 13px; text-align: center;">
+              <div style="font-family: 'Space Mono', monospace; font-size: 20px; font-weight: 700; color: #f2f5ea;">{{ curEx.weight }}</div>
+              <div style="font-size: 11px; color: #7d836f; margin-top: 3px;">Charge</div>
+            </div>
+          </div>
+
+          <!-- LIA tip -->
+          <div style="background: linear-gradient(135deg, rgba(205,251,69,.12), rgba(205,251,69,.03)); border: 1px solid rgba(205,251,69,.25); border-radius: 16px; padding: 14px; display: flex; gap: 11px; align-items: flex-start; margin-bottom: 16px;">
+            <div style="width: 26px; height: 26px; border-radius: 8px; background: #cdfb45; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"><i data-lucide="sparkles" style="width: 15px; height: 15px; color: #11140a;"></i></div>
+            <div>
+              <div style="font-size: 11px; font-weight: 800; color: #cdfb45; margin-bottom: 3px;">CONSEIL LIA</div>
+              <p style="margin: 0; font-size: 13px; line-height: 1.4; color: #e7ecd9;">{{ curEx.tip }}</p>
+            </div>
+          </div>
+
+          <button onClick="{{ validateSet }}" style="width: 100%; background: #cdfb45; color: #11140a; border: none; font-weight: 900; font-size: 17px; padding: 16px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; margin-bottom: 24px;" style-hover="background: #d9ff5e;">
+            <i data-lucide="check" style="width: 20px; height: 20px;"></i> {{ validateLabel }}
+          </button>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    screen: 'today',
+    onboarding: true,
+    obStep: 0,
+    goal: 'muscle',
+    tone: 58,
+    // session
+    sessActive: false,
+    exIndex: 0,
+    setIndex: 0,
+    reps: 0,
+    resting: false,
+    restLeft: 0,
+    elapsed: 0,
+    // chat
+    chat: [
+      { from: 'lia', text: "Salut Marco. J'ai préparé ta séance bas du corps et adapté tes charges selon tes 3 dernières perfs. Une question avant d'attaquer ?" },
+    ],
+    input: '',
+    typing: false,
+  };
+
+  exercises = [
+    { name: 'Squat barre', setsTotal: 4, repsTarget: 8, weight: '60 kg', rest: 75, tip: 'Dos neutre, pousse dans les talons. Descends sous la parallèle.' },
+    { name: 'Presse à cuisses', setsTotal: 3, repsTarget: 12, weight: '120 kg', rest: 60, tip: 'Amplitude complète, ne bloque pas les genoux en haut.' },
+    { name: 'Soulevé roumain', setsTotal: 4, repsTarget: 8, weight: '70 kg', rest: 75, tip: 'Charnière de hanche, barre proche des jambes, gainage actif.' },
+    { name: 'Fentes haltères', setsTotal: 3, repsTarget: 10, weight: '2×16 kg', rest: 60, tip: 'Genou aligné sur la pointe de pied, buste droit.' },
+    { name: 'Leg curl', setsTotal: 3, repsTarget: 12, weight: '40 kg', rest: 45, tip: 'Contraction lente, 2s en excentrique pour sentir les ischios.' },
+    { name: 'Mollets debout', setsTotal: 4, repsTarget: 15, weight: '80 kg', rest: 45, tip: 'Pause 1s en haut, étirement complet en bas.' },
+  ];
+
+  componentDidMount() {
+    this._t = setInterval(() => this.tick(), 1000);
+    this.refreshIcons();
+  }
+  componentDidUpdate() { this.refreshIcons(); }
+  componentWillUnmount() { clearInterval(this._t); }
+  refreshIcons() {
+    if (window.lucide) { try { window.lucide.createIcons(); } catch (e) {} }
+  }
+
+  tick() {
+    this.setState(s => {
+      if (!s.sessActive) return null;
+      const n = { elapsed: s.elapsed + 1 };
+      if (s.resting) {
+        const left = s.restLeft - 1;
+        if (left <= 0) { n.restLeft = 0; n.resting = false; n.reps = 0; }
+        else n.restLeft = left;
+      } else {
+        const ex = this.exercises[s.exIndex];
+        if (ex && s.reps < ex.repsTarget) n.reps = s.reps + 1;
+      }
+      return n;
+    });
+  }
+
+  go(screen) { this.setState({ screen }); }
+
+  startSession = () => this.setState({ sessActive: true, exIndex: 0, setIndex: 0, reps: 0, resting: false, restLeft: 0, elapsed: 0 });
+  finishSession = () => this.setState({ sessActive: false });
+
+  validateSet = () => {
+    this.setState(s => {
+      const ex = this.exercises[s.exIndex];
+      if (s.setIndex + 1 < ex.setsTotal) {
+        return { setIndex: s.setIndex + 1, reps: 0, resting: true, restLeft: ex.rest };
+      }
+      if (s.exIndex + 1 < this.exercises.length) {
+        return { exIndex: s.exIndex + 1, setIndex: 0, reps: 0, resting: true, restLeft: this.exercises[s.exIndex + 1].rest };
+      }
+      return { sessActive: false };
+    });
+  };
+  skipRest = () => this.setState({ resting: false, restLeft: 0, reps: 0 });
+  addRest = () => this.setState(s => ({ restLeft: s.restLeft + 20 }));
+
+  onInput = (e) => this.setState({ input: e.target.value });
+  onInputKey = (e) => { if (e.key === 'Enter') this.send(); };
+  send = () => { const t = this.state.input.trim(); if (t) this.pushReply(t); };
+  quickAsk = (t) => this.pushReply(t);
+  scrollBottom() { const el = document.getElementById('miaScroll'); if (el) el.scrollTop = el.scrollHeight; }
+  pushReply(text) {
+    this.setState(s => ({ chat: [...s.chat, { from: 'me', text }], input: '', typing: true }));
+    setTimeout(() => this.scrollBottom(), 40);
+    clearTimeout(this._reply);
+    this._reply = setTimeout(() => {
+      const reply = this.liaRespond(text);
+      this.setState(s => ({ chat: [...s.chat, { from: 'lia', text: reply }], typing: false }));
+      setTimeout(() => this.scrollBottom(), 40);
+    }, 1150);
+  }
+  liaRespond(text) {
+    const t = text.toLowerCase();
+    const tone = this.state.tone;
+    if (/genou|mal|douleur|bless|épaule|dos/.test(t))
+      return "Reçu, on protège ça. Je retire les fentes et je passe à la presse guidée — moins de stress sur l'articulation. Je baisse aussi la charge au squat de 10% aujourd'hui. Préviens-moi si ça tire.";
+    if (/repas|mang|nutri|prot|recette|calorie/.test(t))
+      return "Post-training : 30g de whey + une banane dans les 20 min, puis poulet (150g) / riz / légumes dans l'heure. Ça te met à ~45g de protéines sur le repas — pile ton objectif.";
+    if (/motiv|envie|fatigu|flemme|dur|pas le moral/.test(t))
+      return tone >= 67
+        ? "Stop les excuses. Tu es à 12 jours de série, on ne casse pas ça aujourd'hui. 40 minutes, c'est tout. On y va, maintenant."
+        : tone < 34
+        ? "Hé, déjà être là c'est une victoire. On fait une version courte si tu veux, juste les 3 premiers exos. L'important c'est de bouger. Je suis avec toi."
+        : "12 jours de série, c'est du sérieux. On garde le rythme — même une séance light compte. Tu te sentiras tellement mieux après. On lance ?";
+    if (/adapte|séance|programme|charge|change|modif/.test(t))
+      return "C'est fait. J'ai monté le squat à 4×8 et réduit le repos à 75s pour densifier le volume. Si c'est trop pendant la séance, dis-le moi, j'ajuste en direct.";
+    if (/merci|super|cool|génial|top/.test(t))
+      return "Avec plaisir. Je suis là à chaque série. On se retrouve sur le squat.";
+    return "Bonne question. Donne-moi un peu de contexte — ton objectif du jour, ton ressenti ou une contrainte — et je te fais une reco précise.";
+  }
+
+  obNext = () => {
+    this.setState(s => {
+      if (s.obStep < 2) return { obStep: s.obStep + 1 };
+      return { onboarding: false, obStep: 0 };
+    });
+  };
+  resetOnboarding = () => this.setState({ onboarding: true, obStep: 0, sessActive: false, screen: 'today' });
+  setGoal(id) { this.setState({ goal: id }); }
+  onTone = (e) => this.setState({ tone: parseInt(e.target.value, 10) });
+
+  toneInfo() {
+    const t = this.state.tone;
+    if (t < 34) return { label: 'Bienveillant', sample: 'Prends ton temps, tu fais déjà super bien. On y va à ton rythme, je suis là.' };
+    if (t < 67) return { label: 'Équilibré', sample: 'Solide ! Encore une série propre et on note un nouveau record. Tu gères.' };
+    return { label: 'Intense', sample: "Pas d'excuse aujourd'hui. Tu as ça en toi — on pousse cette dernière, à fond !" };
+  }
+  liaCard() {
+    const t = this.state.tone;
+    if (t < 34) return "Tu as bien récupéré cette nuit. Si tu le sens, on tente 4×8 au squat — sinon on garde 4×6, aucun souci.";
+    if (t < 67) return "Récup au top (82%). J'ai monté tes squats à 4×8 aujourd'hui — t'es prêt pour un nouveau palier.";
+    return "Récupération à 82%, zéro excuse. Squats à 4×8, on attaque fort et on bat ton record de la semaine.";
+  }
+
+  fmt(s) {
+    const m = Math.floor(s / 60), x = s % 60;
+    return m + ':' + (x < 10 ? '0' : '') + x;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const ti = this.toneInfo();
+    const lime = '#cdfb45', muted = '#5f6553', off = '#f2f5ea';
+    const onScreen = (k) => !s.onboarding && !s.sessActive && s.screen === k;
+
+    // week bars
+    const rawWeek = [['L', 0, true], ['M', 38, false], ['M', 52, false], ['J', 30, false], ['V', 0, false], ['S', 48, false], ['D', 0, false]];
+    const weekBars = rawWeek.map(([d, m, today]) => {
+      const h = Math.max(6, Math.round(m / 55 * 56));
+      const filled = m > 0;
+      return {
+        d,
+        labelColor: today ? lime : '#7d836f',
+        style: `width: 100%; height: ${h}px; border-radius: 7px; background: ${filled ? 'linear-gradient(#cdfb45,#9fd232)' : 'rgba(255,255,255,.06)'}; ${today ? 'box-shadow: 0 0 0 2px rgba(205,251,69,.5);' : ''} transform-origin: bottom; animation: miaBar .5s ease both;`,
+      };
+    });
+
+    // goals
+    const goals = [
+      { id: 'muscle', label: 'Prendre du muscle', desc: 'Hypertrophie & force', icon: 'dumbbell' },
+      { id: 'perte', label: 'Perdre du gras', desc: 'Définition & cardio', icon: 'flame' },
+      { id: 'forme', label: 'Me remettre en forme', desc: 'Énergie & régularité', icon: 'heart-pulse' },
+      { id: 'perf', label: 'Performance', desc: 'Objectif charge / chrono', icon: 'gauge' },
+    ];
+    const goalsView = goals.map(g => {
+      const sel = s.goal === g.id;
+      return {
+        ...g,
+        onClick: () => this.setGoal(g.id),
+        iconBg: sel ? 'rgba(205,251,69,.16)' : 'rgba(255,255,255,.05)',
+        iconColor: sel ? lime : '#8d927e',
+        check: sel ? 'check-circle-2' : 'circle',
+        style: `width: 100%; display: flex; align-items: center; gap: 13px; padding: 14px; border-radius: 16px; cursor: pointer; background: ${sel ? 'rgba(205,251,69,.08)' : '#12150d'}; border: 1px solid ${sel ? 'rgba(205,251,69,.4)' : 'rgba(255,255,255,.06)'};`,
+      };
+    });
+
+    // onboarding dots
+    const obDots = [0, 1, 2].map(i => ({ color: i <= s.obStep ? lime : 'rgba(255,255,255,.12)' }));
+
+    // session
+    const ex = this.exercises[s.exIndex] || this.exercises[0];
+    const sessDots = this.exercises.map((e, i) => ({
+      color: i < s.exIndex ? lime : (i === s.exIndex ? 'rgba(205,251,69,.5)' : 'rgba(255,255,255,.08)'),
+    }));
+    const repPct = Math.min(1, s.reps / ex.repsTarget);
+    const repRingStyle = `position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#cdfb45 ${Math.round(repPct * 360)}deg, transparent 0deg); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 6px)); mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 6px)); transition: background .3s ease;`;
+
+    return {
+      user: { name: 'Marco', initials: 'M', streak: 12, dateLabel: 'LUNDI 15 JUIN' },
+      // nav
+      isToday: onScreen('today'), isLia: onScreen('lia'), isProgress: onScreen('progress'),
+      isProgram: onScreen('program'), isNutrition: onScreen('nutrition'), isProfile: onScreen('profile'),
+      navToday: s.screen === 'today' ? lime : muted,
+      navProgram: s.screen === 'program' ? lime : muted,
+      navLia: s.screen === 'lia' ? lime : muted,
+      navProgress: s.screen === 'progress' ? lime : muted,
+      navProfile: s.screen === 'profile' ? lime : muted,
+      goToday: () => this.go('today'), goLia: () => this.go('lia'), goProgress: () => this.go('progress'),
+      goProgram: () => this.go('program'), goNutrition: () => this.go('nutrition'), goProfile: () => this.go('profile'),
+      // tone / lia
+      tone: s.tone, toneLabel: ti.label, toneSample: ti.sample, liaCardText: this.liaCard(),
+      onTone: this.onTone, rangeStyle: 'width: 100%; background: linear-gradient(90deg,#cdfb45 ' + s.tone + '%, rgba(255,255,255,.1) ' + s.tone + '%);',
+      // chat
+      chat: s.chat.map(m => ({
+        text: m.text, isLia: m.from === 'lia',
+        rowStyle: 'display: flex; align-items: flex-end; gap: 8px; margin-bottom: 14px; animation: miaUp .35s ease both;' + (m.from === 'me' ? ' flex-direction: row-reverse;' : ''),
+        bubbleStyle: m.from === 'me'
+          ? 'max-width: 80%; background: #cdfb45; color: #11140a; padding: 11px 14px; border-radius: 18px 18px 5px 18px; font-size: 14px; line-height: 1.45; font-weight: 500;'
+          : 'max-width: 80%; background: #161a11; border: 1px solid rgba(255,255,255,.07); color: #e7ecd9; padding: 11px 14px; border-radius: 18px 18px 18px 5px; font-size: 14px; line-height: 1.5;',
+      })),
+      typing: s.typing, input: s.input, send: this.send, onChatInput: this.onInput, onChatKey: this.onInputKey,
+      chips: [
+        { label: 'Adapte ma séance', icon: 'sliders-horizontal' },
+        { label: "J'ai mal au genou", icon: 'heart-pulse' },
+        { label: 'Idée repas post-training', icon: 'utensils' },
+        { label: 'Motive-moi', icon: 'flame' },
+      ].map(c => ({ ...c, onClick: () => this.quickAsk(c.label) })),
+      // today
+      readiness: [
+        { icon: 'battery-charging', value: '82%', label: 'Énergie' },
+        { icon: 'moon', value: '7h20', label: 'Sommeil' },
+        { icon: 'heart-pulse', value: 'Prêt', label: 'Récup' },
+      ],
+      todaySession: { title: 'BAS DU CORPS', subtitle: 'Force · Hypertrophie', duration: 48, count: 6 },
+      exercisePreview: this.exercises.slice(0, 3).map((e, i) => ({ num: i + 1, name: e.name, sets: e.setsTotal + ' × ' + e.repsTarget })),
+      weekBars,
+      startSession: this.startSession,
+      // onboarding
+      onboarding: s.onboarding, obDots,
+      isOb0: s.obStep === 0, isOb1: s.obStep === 1, isOb2: s.obStep === 2,
+      goalsView, obNext: this.obNext, resetOnboarding: this.resetOnboarding,
+      obCta: s.obStep === 0 ? 'Découvrir LIA' : s.obStep === 1 ? 'Continuer' : 'Lancer Mia',
+      // session
+      sessActive: s.sessActive, resting: s.resting, notResting: !s.resting,
+      curEx: ex, exNum: s.exIndex + 1, exTotal: this.exercises.length,
+      setNum: s.setIndex + 1, curReps: s.reps,
+      elapsedLabel: this.fmt(s.elapsed), restLabel: this.fmt(s.restLeft),
+      sessDots, repRingStyle,
+      validateSet: this.validateSet, skipRest: this.skipRest, addRest: this.addRest, finishSession: this.finishSession,
+      validateLabel: (s.setIndex + 1 < ex.setsTotal) ? 'Valider la série' : (s.exIndex + 1 < this.exercises.length ? 'Exercice suivant' : 'Terminer la séance'),
+
+      // PROGRESS
+      volumeBars: [58, 64, 61, 70, 67, 75, 79, 88].map((v, i, a) => ({
+        style: 'width: 100%; height: ' + Math.round(v / 90 * 84) + 'px; border-radius: 6px 6px 2px 2px; background: ' + (i === a.length - 1 ? 'linear-gradient(#cdfb45,#9fd232)' : 'rgba(205,251,69,.22)') + '; transform-origin: bottom; animation: miaBar .5s ease both;',
+        label: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8'][i],
+        labelColor: i === a.length - 1 ? '#cdfb45' : '#5f6553',
+      })),
+      records: [
+        { name: 'Squat', value: '100 kg', delta: '+5 kg', icon: 'dumbbell' },
+        { name: 'Soulevé de terre', value: '140 kg', delta: '+10 kg', icon: 'dumbbell' },
+        { name: 'Développé couché', value: '80 kg', delta: '+2.5 kg', icon: 'dumbbell' },
+        { name: 'Tractions lestées', value: '+15 kg', delta: '+5 kg', icon: 'dumbbell' },
+      ],
+      badges: [
+        { label: 'Série 12j', icon: 'flame', on: true }, { label: '10 000 kg', icon: 'trophy', on: true },
+        { label: 'Lève-tôt', icon: 'sunrise', on: true }, { label: '30 jours', icon: 'calendar-check', on: false },
+      ].map(b => ({ ...b, boxStyle: 'display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 8px; border-radius: 16px; background: ' + (b.on ? 'rgba(205,251,69,.08)' : '#101309') + '; border: 1px solid ' + (b.on ? 'rgba(205,251,69,.25)' : 'rgba(255,255,255,.05)') + ';', iconColor: b.on ? '#cdfb45' : '#3f443a', txtColor: b.on ? '#e7ecd9' : '#5f6553' })),
+      weightLine: (function () { const w = [82, 81.6, 81, 80.7, 80.2, 79.6, 79.1, 78.3]; return w.map((v, i) => (12 + i / (w.length - 1) * 296).toFixed(1) + ',' + (80 - (v - 78) / 4.4 * 62).toFixed(1)).join(' '); })(),
+      weightArea: (function () { const w = [82, 81.6, 81, 80.7, 80.2, 79.6, 79.1, 78.3]; const p = w.map((v, i) => (12 + i / (w.length - 1) * 296).toFixed(1) + ',' + (80 - (v - 78) / 4.4 * 62).toFixed(1)).join(' '); return '12,88 ' + p + ' 308,88'; })(),
+
+      // PROGRAM
+      weekStrip: [['L', 15], ['M', 16], ['M', 17], ['J', 18], ['V', 19], ['S', 20], ['D', 21]].map(([d, n], i) => ({
+        d, n, isToday: i === 0,
+        style: 'flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 0; border-radius: 13px; ' + (i === 0 ? 'background: #cdfb45;' : 'background: #12150d; border: 1px solid rgba(255,255,255,.05);'),
+        dColor: i === 0 ? '#11140a' : '#7d836f', nColor: i === 0 ? '#11140a' : '#e7ecd9', nWeight: i === 0 ? 900 : 600,
+      })),
+      programDays: [
+        { day: 'LUN 15', title: 'Bas du corps', sub: 'Force · 48 min', status: 'today', icon: 'dumbbell' },
+        { day: 'MAR 16', title: 'Repos actif', sub: 'Mobilité · 15 min', status: 'rest', icon: 'wind' },
+        { day: 'MER 17', title: 'Haut du corps', sub: 'Hypertrophie · 52 min', status: 'up', icon: 'dumbbell' },
+        { day: 'JEU 18', title: 'Repos', sub: 'Récupération complète', status: 'rest', icon: 'moon' },
+        { day: 'VEN 19', title: 'Full body', sub: 'Force · 50 min', status: 'up', icon: 'dumbbell' },
+        { day: 'SAM 20', title: 'Cardio + gainage', sub: 'Conditionnement · 35 min', status: 'up', icon: 'heart-pulse' },
+      ].map(p => {
+        const map = { today: { bd: 'rgba(205,251,69,.4)', bg: 'rgba(205,251,69,.06)', ic: '#cdfb45', icbg: 'rgba(205,251,69,.14)', tag: 'AUJOURD\u2019HUI', tagc: '#cdfb45' }, up: { bd: 'rgba(255,255,255,.06)', bg: '#12150d', ic: '#e7ecd9', icbg: 'rgba(255,255,255,.06)', tag: '', tagc: '' }, rest: { bd: 'rgba(255,255,255,.04)', bg: '#0e110b', ic: '#5f6553', icbg: 'rgba(255,255,255,.04)', tag: 'REPOS', tagc: '#5f6553' } }[p.status];
+        return { ...p, cardStyle: 'display: flex; align-items: center; gap: 13px; padding: 15px; border-radius: 18px; background: ' + map.bg + '; border: 1px solid ' + map.bd + ';', iconBg: map.icbg, iconColor: map.ic, tag: map.tag, tagColor: map.tagc, titleColor: p.status === 'rest' ? '#9aa08b' : '#f2f5ea' };
+      }),
+
+      // NUTRITION
+      calPct: 1840 / 2200,
+      calRing: 'position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#cdfb45 ' + Math.round(1840 / 2200 * 360) + 'deg, rgba(255,255,255,.06) 0deg); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 9px)); mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 9px));',
+      macros: [
+        { label: 'Protéines', val: 128, target: 160, color: '#cdfb45' },
+        { label: 'Glucides', val: 185, target: 240, color: '#ff6b3d' },
+        { label: 'Lipides', val: 52, target: 70, color: '#ffd24a' },
+      ].map(m => ({ ...m, barStyle: 'height: 100%; width: ' + Math.round(m.val / m.target * 100) + '%; border-radius: 99px; background: ' + m.color + ';' })),
+      meals: [
+        { name: 'Petit-déjeuner', time: '7h30', kcal: 480, items: 'Flocons d\u2019avoine, œufs, fruits rouges', done: true, icon: 'sunrise' },
+        { name: 'Déjeuner', time: '12h45', kcal: 720, items: 'Poulet, riz basmati, brocolis', done: true, icon: 'sun' },
+        { name: 'Collation', time: '16h30', kcal: 240, items: 'Skyr, amandes, miel', done: true, icon: 'apple' },
+        { name: 'Dîner', time: '20h00', kcal: 400, items: 'Saumon, patate douce, épinards', done: false, icon: 'moon' },
+      ].map(m => ({ ...m, iconBg: m.done ? 'rgba(205,251,69,.12)' : 'rgba(255,255,255,.05)', iconColor: m.done ? '#cdfb45' : '#7d836f', check: m.done ? 'check-circle-2' : 'circle-plus', checkColor: m.done ? '#cdfb45' : '#7d836f' })),
+
+      // PROFILE
+      profileStats: [{ v: '48', l: 'Séances' }, { v: '12', l: 'Série · j' }, { v: '94', l: 'Jours actifs' }],
+      settings: [
+        { icon: 'bell', label: 'Notifications', val: 'Activées' },
+        { icon: 'target', label: 'Objectif', val: 'Prendre du muscle' },
+        { icon: 'ruler', label: 'Unités', val: 'kg / cm' },
+        { icon: 'crown', label: 'Abonnement', val: 'Premium' },
+        { icon: 'circle-help', label: 'Aide & support', val: '' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

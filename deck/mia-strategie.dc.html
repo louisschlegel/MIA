@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    [data-deck-active] .anim { animation: deckUp .6s cubic-bezier(.2,.7,.2,1) both; }
+    [data-deck-active] .anim2 { animation: deckUp .6s .12s cubic-bezier(.2,.7,.2,1) both; }
+    [data-deck-active] .anim3 { animation: deckUp .6s .24s cubic-bezier(.2,.7,.2,1) both; }
+    [data-deck-active] .anim4 { animation: deckUp .6s .36s cubic-bezier(.2,.7,.2,1) both; }
+  }
+  @keyframes deckUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+</style>
+</helmet>
+
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+
+  <!-- ================= 01 · TITLE ================= -->
+  <section data-label="Titre" data-speaker-notes="Mia, plateforme de coaching fitness pilotée par l'IA. Le fil rouge de toute la présentation : LIA, l'assistant qui transforme une app de fitness en vrai coach. Ton ce qu'on va prouver : pourquoi ce modèle, pourquoi le temps réel, pourquoi le ton réglable." style="background: radial-gradient(120% 90% at 78% 12%, #1a230d 0%, #0c0e09 50%, #08090a 100%); font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; flex-direction: column;">
+    <div style="display: flex; align-items: center; gap: 16px;" class="anim">
+      <div style="width: 52px; height: 52px; border-radius: 15px; background: #cdfb45; display: flex; align-items: center; justify-content: center;"><i data-lucide="zap" style="width: 30px; height: 30px; color: #11140a;"></i></div>
+      <div>
+        <div style="font-weight: 900; letter-spacing: .18em; font-size: 22px;">MIA</div>
+        <div style="font-family: 'Space Mono', monospace; font-size: 13px; color: #7c8a4f; letter-spacing: .14em;">LIA · COACHING IA</div>
+      </div>
+    </div>
+    <div style="margin-top: auto;">
+      <div class="anim2" style="font-family: 'Space Mono', monospace; font-size: 24px; letter-spacing: .12em; color: #cdfb45; margin-bottom: 22px;">DOCUMENT STRATÉGIQUE</div>
+      <div class="anim2" style="font-size: 168px; font-weight: 900; letter-spacing: -.04em; line-height: .9;">Ton coach ne<br>dort <span style="color: #cdfb45;">jamais.</span></div>
+      <p class="anim3" style="font-size: 32px; line-height: 1.45; color: #9aa08b; max-width: 1020px; margin: 36px 0 0;">Mia est une plateforme de fitness où une intelligence — <span style="color: #f2f5ea; font-weight: 700;">LIA</span> — suit chaque répétition, adapte le programme et pousse l'athlète au bon moment. Pas un planning figé : un vrai coach, pour chacun.</p>
+    </div>
+    <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: 56px; border-top: 1px solid rgba(255,255,255,.08);">
+      <span style="font-size: 22px; color: #8d927e;">Vision produit &amp; modèle</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #5f6553;">01 / 11</span>
+    </div>
+  </section>
+
+  <!-- ================= 02 · PROBLÈME ================= -->
+  <section data-label="Le problème" data-speaker-notes="Le fitness solo échoue dans la durée. Trois vérités : l'abandon massif, le coût d'un coach humain, et des apps qui ne sont que des catalogues d'exercices sans adaptation. C'est le vide que Mia comble." style="background: #08090a; font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; flex-direction: column;">
+    <div class="anim" style="font-family: 'Space Mono', monospace; font-size: 22px; letter-spacing: .14em; color: #ff6b3d; margin-bottom: 26px;">01 · LE PROBLÈME</div>
+    <div class="anim" style="font-size: 88px; font-weight: 900; letter-spacing: -.03em; line-height: 1; max-width: 1280px;">Le fitness en solo ne tient pas dans la durée.</div>
+    <div style="margin-top: auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;">
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 24px; padding: 44px;">
+        <div style="font-size: 116px; font-weight: 900; color: #ff6b3d; line-height: .9; letter-spacing: -.03em;">80%</div>
+        <p style="font-size: 28px; line-height: 1.4; color: #c9cebb; margin: 24px 0 0;">abandonnent leur programme en moins de 5 mois. Sans suivi, la motivation s'effondre.</p>
+      </div>
+      <div class="anim3" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 24px; padding: 44px;">
+        <div style="font-size: 116px; font-weight: 900; color: #f2f5ea; line-height: .9; letter-spacing: -.03em;">200€<span style="font-size: 44px; color: #7d836f;">/mois</span></div>
+        <p style="font-size: 28px; line-height: 1.4; color: #c9cebb; margin: 24px 0 0;">le prix d'un coach personnel. Inaccessible pour l'immense majorité des pratiquants.</p>
+      </div>
+      <div class="anim4" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 24px; padding: 44px;">
+        <div style="font-size: 116px; font-weight: 900; color: #f2f5ea; line-height: .9; letter-spacing: -.03em;">0</div>
+        <p style="font-size: 28px; line-height: 1.4; color: #c9cebb; margin: 24px 0 0;">adaptation dans les apps actuelles. Des plannings figés, identiques pour tous, semaine après semaine.</p>
+      </div>
+    </div>
+    <div style="margin-top: 64px; display: flex; align-items: center; justify-content: space-between;">
+      <span style="font-size: 22px; color: #8d927e;">MIA · stratégie</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #5f6553;">02 / 11</span>
+    </div>
+  </section>
+
+  <!-- ================= 03 · SOLUTION ================= -->
+  <section data-label="La solution" data-speaker-notes="Le pivot. On inverse les couleurs pour marquer le moment. Mia, c'est mettre une intelligence derrière chaque séance. LIA n'est pas une fonctionnalité de plus : c'est le produit." style="background: #cdfb45; font-family: 'Archivo', sans-serif; color: #0c0e09; padding: 96px 120px; display: flex; flex-direction: column; justify-content: center;">
+    <div class="anim" style="font-family: 'Space Mono', monospace; font-size: 24px; letter-spacing: .14em; color: #2c3d08; margin-bottom: 34px;">02 · LA SOLUTION</div>
+    <div class="anim2" style="font-size: 116px; font-weight: 900; letter-spacing: -.035em; line-height: .98; max-width: 1500px;">Et si chacun avait un vrai coach, disponible 24/7 ?</div>
+    <p class="anim3" style="font-size: 38px; line-height: 1.4; color: #1f2a0c; max-width: 1300px; margin: 48px 0 0; font-weight: 500;">Mia place <span style="background: #0c0e09; color: #cdfb45; padding: 2px 16px; border-radius: 10px;">LIA</span> derrière chaque répétition, chaque programme, chaque décision. Elle observe, apprend, conseille et motive — comme le ferait le meilleur des coachs, à l'échelle de millions d'athlètes.</p>
+    <div style="margin-top: 80px; display: flex; align-items: center; justify-content: space-between;">
+      <span style="font-size: 22px; color: #2c3d08; font-weight: 600;">MIA · stratégie</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #3c4d18;">03 / 11</span>
+    </div>
+  </section>
+
+  <!-- ================= 04 · LIA CAPABILITIES ================= -->
+  <section data-label="LIA, au cœur" data-speaker-notes="Ce que LIA fait concrètement. Six capacités qui couvrent tout le cycle : avant (programme), pendant (coaching temps réel, comptage), après (analyse, motivation). Insister : c'est un système, pas un chatbot isolé." style="background: #08090a; font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; flex-direction: column;">
+    <div class="anim" style="font-family: 'Space Mono', monospace; font-size: 22px; letter-spacing: .14em; color: #cdfb45; margin-bottom: 22px;">03 · L'ASSISTANT</div>
+    <div class="anim" style="font-size: 88px; font-weight: 900; letter-spacing: -.03em; line-height: 1; margin-bottom: 56px;">LIA, au cœur de tout.</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 26px;">
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 38px;">
+        <div style="width: 60px; height: 60px; border-radius: 16px; background: rgba(205,251,69,.12); display: flex; align-items: center; justify-content: center; margin-bottom: 26px;"><i data-lucide="activity" style="width: 30px; height: 30px; color: #cdfb45;"></i></div>
+        <div style="font-size: 30px; font-weight: 800; margin-bottom: 12px;">Coaching temps réel</div>
+        <p style="font-size: 24px; line-height: 1.4; color: #9aa08b; margin: 0;">Forme, intensité, repos — corrigés pendant l'effort, série après série.</p>
+      </div>
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 38px;">
+        <div style="width: 60px; height: 60px; border-radius: 16px; background: rgba(205,251,69,.12); display: flex; align-items: center; justify-content: center; margin-bottom: 26px;"><i data-lucide="repeat" style="width: 30px; height: 30px; color: #cdfb45;"></i></div>
+        <div style="font-size: 30px; font-weight: 800; margin-bottom: 12px;">Comptage des répétitions</div>
+        <p style="font-size: 24px; line-height: 1.4; color: #9aa08b; margin: 0;">Suivi automatique du volume et de la performance, sans rien noter à la main.</p>
+      </div>
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 38px;">
+        <div style="width: 60px; height: 60px; border-radius: 16px; background: rgba(205,251,69,.12); display: flex; align-items: center; justify-content: center; margin-bottom: 26px;"><i data-lucide="sliders-horizontal" style="width: 30px; height: 30px; color: #cdfb45;"></i></div>
+        <div style="font-size: 30px; font-weight: 800; margin-bottom: 12px;">Programme adaptatif</div>
+        <p style="font-size: 24px; line-height: 1.4; color: #9aa08b; margin: 0;">Charges, volume et récup ajustés automatiquement selon les progrès réels.</p>
+      </div>
+      <div class="anim3" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 38px;">
+        <div style="width: 60px; height: 60px; border-radius: 16px; background: rgba(205,251,69,.12); display: flex; align-items: center; justify-content: center; margin-bottom: 26px;"><i data-lucide="messages-square" style="width: 30px; height: 30px; color: #cdfb45;"></i></div>
+        <div style="font-size: 30px; font-weight: 800; margin-bottom: 12px;">Réponses à la demande</div>
+        <p style="font-size: 24px; line-height: 1.4; color: #9aa08b; margin: 0;">Nutrition, technique, douleur, motivation : une réponse experte à toute heure.</p>
+      </div>
+      <div class="anim3" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 38px;">
+        <div style="width: 60px; height: 60px; border-radius: 16px; background: rgba(205,251,69,.12); display: flex; align-items: center; justify-content: center; margin-bottom: 26px;"><i data-lucide="brain" style="width: 30px; height: 30px; color: #cdfb45;"></i></div>
+        <div style="font-size: 30px; font-weight: 800; margin-bottom: 12px;">Suggestions proactives</div>
+        <p style="font-size: 24px; line-height: 1.4; color: #9aa08b; margin: 0;">Analyse des données pour devancer les blessures, plateaux et baisses de régime.</p>
+      </div>
+      <div class="anim3" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 38px;">
+        <div style="width: 60px; height: 60px; border-radius: 16px; background: rgba(205,251,69,.12); display: flex; align-items: center; justify-content: center; margin-bottom: 26px;"><i data-lucide="flame" style="width: 30px; height: 30px; color: #cdfb45;"></i></div>
+        <div style="font-size: 30px; font-weight: 800; margin-bottom: 12px;">Motivation &amp; relance</div>
+        <p style="font-size: 24px; line-height: 1.4; color: #9aa08b; margin: 0;">Célèbre les victoires, relance après une absence, entretient la série.</p>
+      </div>
+    </div>
+    <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: 48px;">
+      <span style="font-size: 22px; color: #8d927e;">MIA · stratégie</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #5f6553;">04 / 11</span>
+    </div>
+  </section>
+
+  <!-- ================= 05 · POURQUOI LE TEMPS RÉEL ================= -->
+  <section data-label="Pourquoi le temps réel" data-speaker-notes="Le choix stratégique clé. La plupart des apps coachent avant ou après. Mais la valeur d'un coach se joue PENDANT l'effort : c'est là qu'on corrige la forme, qu'on pousse une rep de plus, qu'on évite la blessure. Compter les reps n'est pas un gadget — c'est ce qui donne à LIA les yeux sur la séance et permet le conseil au bon instant." style="background: #08090a; font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; gap: 80px; align-items: stretch;">
+    <div style="flex: 1.2; display: flex; flex-direction: column;">
+      <div class="anim" style="font-family: 'Space Mono', monospace; font-size: 22px; letter-spacing: .14em; color: #cdfb45; margin-bottom: 22px;">04 · POURQUOI LE TEMPS RÉEL</div>
+      <div class="anim" style="font-size: 82px; font-weight: 900; letter-spacing: -.03em; line-height: 1; margin-bottom: 38px;">La valeur se joue pendant l'effort.</div>
+      <p class="anim2" style="font-size: 30px; line-height: 1.5; color: #c9cebb; margin: 0 0 28px; max-width: 760px;">Un bon coach ne sert pas à écrire un planning : il sert à être là <span style="color: #cdfb45; font-weight: 700;">à la rep qui compte</span>. C'est pendant la séance qu'on corrige une posture, qu'on retient quelqu'un d'aller trop loin, qu'on arrache une dernière répétition.</p>
+      <p class="anim3" style="font-size: 30px; line-height: 1.5; color: #c9cebb; margin: 0; max-width: 760px;">C'est pourquoi LIA <span style="color: #f2f5ea; font-weight: 700;">compte chaque rep</span> et observe le tempo en direct : non pas pour le score, mais pour avoir les yeux sur l'effort et conseiller à l'instant exact où ça change tout.</p>
+      <div class="anim3" style="margin-top: auto; display: flex; gap: 48px; padding-top: 40px;">
+        <div><div style="font-family: 'Space Mono', monospace; font-size: 60px; font-weight: 700; color: #cdfb45;">3×</div><div style="font-size: 24px; color: #8d927e;">plus d'assiduité avec un feedback en séance</div></div>
+        <div><div style="font-family: 'Space Mono', monospace; font-size: 60px; font-weight: 700; color: #cdfb45;">0</div><div style="font-size: 24px; color: #8d927e;">saisie manuelle pour l'athlète</div></div>
+      </div>
+    </div>
+    <div class="anim2" style="flex: .8; background: #12150d; border: 1px solid rgba(205,251,69,.2); border-radius: 28px; padding: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <div style="font-family: 'Space Mono', monospace; font-size: 20px; color: #cdfb45; letter-spacing: .12em; margin-bottom: 36px;">SÉANCE EN DIRECT · SQUAT</div>
+      <div style="position: relative; width: 360px; height: 360px; display: flex; align-items: center; justify-content: center;">
+        <div style="position: absolute; inset: 0; border-radius: 50%; border: 12px solid rgba(255,255,255,.06);"></div>
+        <div style="position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#cdfb45 270deg, transparent 0); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 12px), #000 0); mask: radial-gradient(farthest-side, transparent calc(100% - 12px), #000 0);"></div>
+        <div style="text-align: center;"><div style="font-family: 'Space Mono', monospace; font-size: 130px; font-weight: 700; color: #cdfb45; line-height: 1;">6</div><div style="font-family: 'Space Mono', monospace; font-size: 26px; color: #7d836f;">/ 8 reps</div></div>
+      </div>
+      <div style="margin-top: 40px; width: 100%; background: rgba(205,251,69,.08); border: 1px solid rgba(205,251,69,.22); border-radius: 18px; padding: 24px 28px; display: flex; gap: 16px; align-items: center;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: #cdfb45; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"><i data-lucide="sparkles" style="width: 24px; height: 24px; color: #11140a;"></i></div>
+        <p style="margin: 0; font-size: 24px; line-height: 1.35; color: #e7ecd9;">« Tempo parfait. Garde le dos neutre sur les deux dernières. »</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 06 · PERSONNALITÉ ================= -->
+  <section data-label="Personnalité réglable" data-speaker-notes="Deuxième choix stratégique : le ton de LIA est réglable, du bienveillant à l'intense. Pourquoi ? Parce que la rétention passe par la relation. Un même message motive l'un et fait fuir l'autre. En laissant l'athlète régler son coach, on maximise l'attachement — et donc la durée de vie de l'abonnement." style="background: #08090a; font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; flex-direction: column;">
+    <div class="anim" style="font-family: 'Space Mono', monospace; font-size: 22px; letter-spacing: .14em; color: #cdfb45; margin-bottom: 22px;">05 · LA RELATION</div>
+    <div class="anim" style="font-size: 88px; font-weight: 900; letter-spacing: -.03em; line-height: 1;">Un coach. Mille personnalités.</div>
+    <p class="anim2" style="font-size: 30px; line-height: 1.45; color: #9aa08b; max-width: 1180px; margin: 28px 0 56px;">La rétention ne tient pas à un algorithme, mais à un lien. L'athlète règle le ton de LIA — et reste parce qu'il s'y attache.</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px;">
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.08); border-radius: 24px; padding: 44px;">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 26px;"><i data-lucide="heart-handshake" style="width: 32px; height: 32px; color: #cdfb45;"></i><span style="font-size: 32px; font-weight: 800;">Bienveillant</span></div>
+        <p style="font-size: 27px; line-height: 1.45; color: #e7ecd9; font-style: italic; margin: 0;">« Déjà être là, c'est une victoire. On y va à ton rythme, je suis avec toi. »</p>
+      </div>
+      <div class="anim3" style="background: rgba(205,251,69,.07); border: 1px solid rgba(205,251,69,.3); border-radius: 24px; padding: 44px;">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 26px;"><i data-lucide="gauge" style="width: 32px; height: 32px; color: #cdfb45;"></i><span style="font-size: 32px; font-weight: 800; color: #cdfb45;">Équilibré</span></div>
+        <p style="font-size: 27px; line-height: 1.45; color: #e7ecd9; font-style: italic; margin: 0;">« Solide ! Encore une série propre et on note un nouveau record. Tu gères. »</p>
+      </div>
+      <div class="anim4" style="background: #12150d; border: 1px solid rgba(255,255,255,.08); border-radius: 24px; padding: 44px;">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 26px;"><i data-lucide="flame" style="width: 32px; height: 32px; color: #ff6b3d;"></i><span style="font-size: 32px; font-weight: 800;">Intense</span></div>
+        <p style="font-size: 27px; line-height: 1.45; color: #e7ecd9; font-style: italic; margin: 0;">« Pas d'excuse aujourd'hui. Tu as ça en toi — on pousse cette dernière, à fond ! »</p>
+      </div>
+    </div>
+    <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: 56px;">
+      <span style="font-size: 22px; color: #8d927e;">MIA · stratégie</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #5f6553;">06 / 11</span>
+    </div>
+  </section>
+
+  <!-- ================= 07 · PRODUIT ================= -->
+  <section data-label="Le produit" data-speaker-notes="Le produit en huit moments, tous démontrables dans le prototype cliquable. Onboarding qui règle le coach, accueil piloté par LIA, séance live, chat, progrès, programme, nutrition, profil. Tout est connecté à LIA." style="background: #08090a; font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; flex-direction: column;">
+    <div class="anim" style="font-family: 'Space Mono', monospace; font-size: 22px; letter-spacing: .14em; color: #cdfb45; margin-bottom: 22px;">06 · LE PRODUIT</div>
+    <div class="anim" style="font-size: 88px; font-weight: 900; letter-spacing: -.03em; line-height: 1; margin-bottom: 18px;">Une expérience, huit moments clés.</div>
+    <p class="anim2" style="font-size: 28px; color: #8d927e; margin: 0 0 52px;">Tous jouables dans le prototype interactif livré avec ce document.</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 22px;">
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 20px; padding: 32px;"><i data-lucide="rocket" style="width: 28px; height: 28px; color: #cdfb45;"></i><div style="font-size: 27px; font-weight: 800; margin: 18px 0 8px;">Onboarding</div><p style="font-size: 22px; line-height: 1.35; color: #9aa08b; margin: 0;">Objectif et personnalité de LIA réglés dès le départ.</p></div>
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 20px; padding: 32px;"><i data-lucide="house" style="width: 28px; height: 28px; color: #cdfb45;"></i><div style="font-size: 27px; font-weight: 800; margin: 18px 0 8px;">Accueil</div><p style="font-size: 22px; line-height: 1.35; color: #9aa08b; margin: 0;">Séance du jour et suggestion proactive de LIA.</p></div>
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 20px; padding: 32px;"><i data-lucide="activity" style="width: 28px; height: 28px; color: #cdfb45;"></i><div style="font-size: 27px; font-weight: 800; margin: 18px 0 8px;">Séance live</div><p style="font-size: 22px; line-height: 1.35; color: #9aa08b; margin: 0;">Comptage des reps, repos, conseils en direct.</p></div>
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 20px; padding: 32px;"><i data-lucide="messages-square" style="width: 28px; height: 28px; color: #cdfb45;"></i><div style="font-size: 27px; font-weight: 800; margin: 18px 0 8px;">Chat LIA</div><p style="font-size: 22px; line-height: 1.35; color: #9aa08b; margin: 0;">Conversation experte, ton adapté au réglage.</p></div>
+      <div class="anim3" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 20px; padding: 32px;"><i data-lucide="trending-up" style="width: 28px; height: 28px; color: #cdfb45;"></i><div style="font-size: 27px; font-weight: 800; margin: 18px 0 8px;">Progrès</div><p style="font-size: 22px; line-height: 1.35; color: #9aa08b; margin: 0;">Volume, courbes, records, succès débloqués.</p></div>
+      <div class="anim3" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 20px; padding: 32px;"><i data-lucide="calendar-days" style="width: 28px; height: 28px; color: #cdfb45;"></i><div style="font-size: 27px; font-weight: 800; margin: 18px 0 8px;">Programme</div><p style="font-size: 22px; line-height: 1.35; color: #9aa08b; margin: 0;">Bloc périodisé, adapté semaine après semaine.</p></div>
+      <div class="anim3" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 20px; padding: 32px;"><i data-lucide="utensils" style="width: 28px; height: 28px; color: #cdfb45;"></i><div style="font-size: 27px; font-weight: 800; margin: 18px 0 8px;">Nutrition</div><p style="font-size: 22px; line-height: 1.35; color: #9aa08b; margin: 0;">Macros, repas et reco nutrition de LIA.</p></div>
+      <div class="anim3" style="background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 20px; padding: 32px;"><i data-lucide="user-round" style="width: 28px; height: 28px; color: #cdfb45;"></i><div style="font-size: 27px; font-weight: 800; margin: 18px 0 8px;">Profil</div><p style="font-size: 22px; line-height: 1.35; color: #9aa08b; margin: 0;">Objectifs, abonnement, réglage de LIA.</p></div>
+    </div>
+    <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: 48px;">
+      <span style="font-size: 22px; color: #8d927e;">MIA · stratégie</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #5f6553;">07 / 11</span>
+    </div>
+  </section>
+
+  <!-- ================= 08 · BOUCLE DE DONNÉES ================= -->
+  <section data-label="La boucle" data-speaker-notes="Pourquoi le modèle se renforce avec le temps : la boucle de données. Chaque séance nourrit LIA, qui personnalise mieux, ce qui donne de meilleurs résultats, donc plus de rétention, donc plus de données. C'est la défensabilité du produit." style="background: #08090a; font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; flex-direction: column;">
+    <div class="anim" style="font-family: 'Space Mono', monospace; font-size: 22px; letter-spacing: .14em; color: #cdfb45; margin-bottom: 22px;">07 · POURQUOI ÇA TIENT</div>
+    <div class="anim" style="font-size: 88px; font-weight: 900; letter-spacing: -.03em; line-height: 1; margin-bottom: 16px;">Plus tu t'entraînes, meilleure devient LIA.</div>
+    <p class="anim2" style="font-size: 28px; color: #8d927e; margin: 0 0 64px; max-width: 1100px;">Chaque séance alimente une boucle qui rend le produit plus utile — et plus difficile à quitter.</p>
+    <div style="display: flex; align-items: stretch; gap: 18px;">
+      <div class="anim2" style="flex: 1; background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 36px;"><div style="font-family: 'Space Mono', monospace; font-size: 24px; color: #cdfb45;">01</div><div style="font-size: 30px; font-weight: 800; margin: 16px 0 10px;">Séance</div><p style="font-size: 22px; line-height: 1.4; color: #9aa08b; margin: 0;">Reps, charges, tempo, ressenti captés en direct.</p></div>
+      <div style="display: flex; align-items: center; color: #cdfb45;"><i data-lucide="chevron-right" style="width: 40px; height: 40px;"></i></div>
+      <div class="anim2" style="flex: 1; background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 36px;"><div style="font-family: 'Space Mono', monospace; font-size: 24px; color: #cdfb45;">02</div><div style="font-size: 30px; font-weight: 800; margin: 16px 0 10px;">LIA apprend</div><p style="font-size: 22px; line-height: 1.4; color: #9aa08b; margin: 0;">Le modèle affine ta réponse à l'effort et à la récup.</p></div>
+      <div style="display: flex; align-items: center; color: #cdfb45;"><i data-lucide="chevron-right" style="width: 40px; height: 40px;"></i></div>
+      <div class="anim3" style="flex: 1; background: #12150d; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 36px;"><div style="font-family: 'Space Mono', monospace; font-size: 24px; color: #cdfb45;">03</div><div style="font-size: 30px; font-weight: 800; margin: 16px 0 10px;">Reco sur-mesure</div><p style="font-size: 22px; line-height: 1.4; color: #9aa08b; margin: 0;">Programme et conseils ajustés à toi seul.</p></div>
+      <div style="display: flex; align-items: center; color: #cdfb45;"><i data-lucide="chevron-right" style="width: 40px; height: 40px;"></i></div>
+      <div class="anim3" style="flex: 1; background: rgba(205,251,69,.08); border: 1px solid rgba(205,251,69,.3); border-radius: 22px; padding: 36px;"><div style="font-family: 'Space Mono', monospace; font-size: 24px; color: #cdfb45;">04</div><div style="font-size: 30px; font-weight: 800; margin: 16px 0 10px; color: #cdfb45;">Résultats</div><p style="font-size: 22px; line-height: 1.4; color: #e7ecd9; margin: 0;">Des progrès visibles → l'athlète reste et revient.</p></div>
+    </div>
+    <div class="anim4" style="margin-top: 40px; display: flex; align-items: center; gap: 16px; color: #8d927e; font-size: 24px;"><i data-lucide="refresh-cw" style="width: 26px; height: 26px; color: #cdfb45;"></i> La boucle se referme : plus de résultats → plus d'usage → plus de données → une LIA encore plus précise.</div>
+    <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: 40px;">
+      <span style="font-size: 22px; color: #8d927e;">MIA · stratégie</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #5f6553;">08 / 11</span>
+    </div>
+  </section>
+
+  <!-- ================= 09 · MODÈLE ÉCONOMIQUE ================= -->
+  <section data-label="Le modèle" data-speaker-notes="Modèle freemium. Le gratuit fait entrer et crée l'habitude ; le Premium monétise la vraie valeur — LIA en temps réel et l'illimité. Le palier Coach+ ouvre un futur marché : connecter de vrais coachs humains à la donnée LIA." style="background: #08090a; font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; flex-direction: column;">
+    <div class="anim" style="font-family: 'Space Mono', monospace; font-size: 22px; letter-spacing: .14em; color: #cdfb45; margin-bottom: 22px;">08 · LE MODÈLE</div>
+    <div class="anim" style="font-size: 88px; font-weight: 900; letter-spacing: -.03em; line-height: 1; margin-bottom: 56px;">Gratuit pour entrer. Premium pour progresser.</div>
+    <div style="display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: 26px; align-items: stretch;">
+      <div class="anim2" style="background: #12150d; border: 1px solid rgba(255,255,255,.08); border-radius: 26px; padding: 48px; display: flex; flex-direction: column;">
+        <div style="font-size: 26px; font-weight: 700; color: #9aa08b;">Découverte</div>
+        <div style="font-size: 72px; font-weight: 900; margin: 14px 0 8px;">Gratuit</div>
+        <div style="font-size: 22px; color: #7d836f; margin-bottom: 32px;">Crée l'habitude</div>
+        <div style="display: flex; flex-direction: column; gap: 18px; font-size: 24px; color: #c9cebb;">
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Programme de base</div>
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Suivi des séances</div>
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Chat LIA limité</div>
+        </div>
+      </div>
+      <div class="anim3" style="background: linear-gradient(160deg, rgba(205,251,69,.14), rgba(205,251,69,.04)); border: 1.5px solid rgba(205,251,69,.45); border-radius: 26px; padding: 48px; display: flex; flex-direction: column; position: relative;">
+        <div style="position: absolute; top: 32px; right: 32px; background: #cdfb45; color: #11140a; font-size: 18px; font-weight: 800; padding: 7px 14px; border-radius: 8px;">CŒUR DE L'OFFRE</div>
+        <div style="font-size: 26px; font-weight: 700; color: #cdfb45;">Premium</div>
+        <div style="font-size: 72px; font-weight: 900; margin: 14px 0 8px;">14,99€<span style="font-size: 30px; color: #8d927e;">/mois</span></div>
+        <div style="font-size: 22px; color: #9aa08b; margin-bottom: 32px;">La vraie valeur de LIA</div>
+        <div style="display: flex; flex-direction: column; gap: 18px; font-size: 24px; color: #eef3e2;">
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Coaching LIA en temps réel</div>
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Programmes adaptatifs illimités</div>
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Nutrition &amp; analyses avancées</div>
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Personnalité de LIA réglable</div>
+        </div>
+      </div>
+      <div class="anim4" style="background: #12150d; border: 1px solid rgba(255,255,255,.08); border-radius: 26px; padding: 48px; display: flex; flex-direction: column;">
+        <div style="font-size: 26px; font-weight: 700; color: #9aa08b;">Coach+ <span style="font-size: 18px; color: #5f6553;">· à venir</span></div>
+        <div style="font-size: 72px; font-weight: 900; margin: 14px 0 8px;">39€<span style="font-size: 30px; color: #8d927e;">/mois</span></div>
+        <div style="font-size: 22px; color: #7d836f; margin-bottom: 32px;">L'humain + l'IA</div>
+        <div style="display: flex; flex-direction: column; gap: 18px; font-size: 24px; color: #c9cebb;">
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Tout Premium</div>
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Coach humain connecté</div>
+          <div style="display: flex; gap: 12px;"><i data-lucide="check" style="width: 26px; height: 26px; color: #cdfb45;"></i> Bilans mensuels en visio</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: 48px;">
+      <span style="font-size: 22px; color: #8d927e;">MIA · stratégie</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #5f6553;">09 / 11</span>
+    </div>
+  </section>
+
+  <!-- ================= 10 · ROADMAP ================= -->
+  <section data-label="La trajectoire" data-speaker-notes="Trois phases. Lancement : prouver la rétention sur la musculation. Croissance : élargir les disciplines et l'intelligence. Écosystème : ouvrir aux coachs et aux objets connectés. Chaque phase débloque la suivante grâce à la donnée accumulée." style="background: #08090a; font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; flex-direction: column;">
+    <div class="anim" style="font-family: 'Space Mono', monospace; font-size: 22px; letter-spacing: .14em; color: #cdfb45; margin-bottom: 22px;">09 · LA TRAJECTOIRE</div>
+    <div class="anim" style="font-size: 88px; font-weight: 900; letter-spacing: -.03em; line-height: 1; margin-bottom: 64px;">Du muscle à l'écosystème.</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; flex: 1;">
+      <div class="anim2" style="display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 28px;"><div style="font-family: 'Space Mono', monospace; font-size: 26px; color: #11140a; background: #cdfb45; padding: 8px 16px; border-radius: 10px; font-weight: 700;">PHASE 1</div></div>
+        <div style="font-size: 40px; font-weight: 900; margin-bottom: 16px;">Lancement</div>
+        <p style="font-size: 26px; line-height: 1.45; color: #9aa08b; margin: 0;">Musculation et force. Prouver la rétention avec le coaching LIA en temps réel. Une discipline, exécutée à la perfection.</p>
+      </div>
+      <div class="anim3" style="display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,.08); padding-left: 30px;">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 28px;"><div style="font-family: 'Space Mono', monospace; font-size: 26px; color: #cdfb45; border: 1px solid rgba(205,251,69,.4); padding: 8px 16px; border-radius: 10px; font-weight: 700;">PHASE 2</div></div>
+        <div style="font-size: 40px; font-weight: 900; margin-bottom: 16px;">Croissance</div>
+        <p style="font-size: 26px; line-height: 1.45; color: #9aa08b; margin: 0;">Cardio, mobilité, course. LIA plus fine grâce aux données accumulées. Défis communautaires et social.</p>
+      </div>
+      <div class="anim4" style="display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,.08); padding-left: 30px;">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 28px;"><div style="font-family: 'Space Mono', monospace; font-size: 26px; color: #8d927e; border: 1px solid rgba(255,255,255,.12); padding: 8px 16px; border-radius: 10px; font-weight: 700;">PHASE 3</div></div>
+        <div style="font-size: 40px; font-weight: 900; margin-bottom: 16px;">Écosystème</div>
+        <p style="font-size: 26px; line-height: 1.45; color: #9aa08b; margin: 0;">Coachs humains connectés (Coach+), objets et capteurs, marketplace de programmes. Mia devient une plateforme.</p>
+      </div>
+    </div>
+    <div style="margin-top: 48px; display: flex; align-items: center; justify-content: space-between;">
+      <span style="font-size: 22px; color: #8d927e;">MIA · stratégie</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #5f6553;">10 / 11</span>
+    </div>
+  </section>
+
+  <!-- ================= 11 · CLOSING ================= -->
+  <section data-label="Conclusion" data-speaker-notes="Clôture sur le manifeste. Trois prochaines étapes concrètes : tester le prototype, valider la rétention en pilote, brancher la vraie IA. Inviter à essayer la maquette cliquable maintenant." style="background: radial-gradient(120% 90% at 22% 88%, #1a230d 0%, #0c0e09 52%, #08090a 100%); font-family: 'Archivo', sans-serif; color: #f2f5ea; padding: 96px 120px; display: flex; flex-direction: column;">
+    <div style="display: flex; align-items: center; gap: 16px;" class="anim"><div style="width: 52px; height: 52px; border-radius: 15px; background: #cdfb45; display: flex; align-items: center; justify-content: center;"><i data-lucide="zap" style="width: 30px; height: 30px; color: #11140a;"></i></div><div style="font-weight: 900; letter-spacing: .18em; font-size: 22px;">MIA</div></div>
+    <div style="margin: auto 0;">
+      <div class="anim2" style="font-size: 148px; font-weight: 900; letter-spacing: -.04em; line-height: .92;">Ton coach ne<br>dort <span style="color: #cdfb45;">jamais.</span></div>
+      <div class="anim3" style="margin-top: 64px; display: flex; gap: 22px;">
+        <div style="flex: 1; background: #12150d; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; padding: 34px;"><div style="font-family: 'Space Mono', monospace; font-size: 22px; color: #cdfb45; margin-bottom: 14px;">01</div><div style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">Tester le prototype</div><p style="font-size: 22px; color: #9aa08b; line-height: 1.4; margin: 0;">Le parcours complet est cliquable dès maintenant.</p></div>
+        <div style="flex: 1; background: #12150d; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; padding: 34px;"><div style="font-family: 'Space Mono', monospace; font-size: 22px; color: #cdfb45; margin-bottom: 14px;">02</div><div style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">Valider en pilote</div><p style="font-size: 22px; color: #9aa08b; line-height: 1.4; margin: 0;">Mesurer la rétention sur un premier groupe d'athlètes.</p></div>
+        <div style="flex: 1; background: #12150d; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; padding: 34px;"><div style="font-family: 'Space Mono', monospace; font-size: 22px; color: #cdfb45; margin-bottom: 14px;">03</div><div style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">Brancher l'IA</div><p style="font-size: 22px; color: #9aa08b; line-height: 1.4; margin: 0;">Connecter LIA au moteur de données réelles.</p></div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 40px; border-top: 1px solid rgba(255,255,255,.08);">
+      <span style="font-size: 22px; color: #8d927e;">Merci · construisons Mia</span>
+      <span style="font-family: 'Space Mono', monospace; font-size: 20px; color: #5f6553;">11 / 11</span>
+    </div>
+  </section>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    this._draw = () => { if (window.lucide) { try { window.lucide.createIcons(); } catch (e) {} } };
+    this._draw();
+    setTimeout(this._draw, 300);
+    setTimeout(this._draw, 1200);
+    document.addEventListener('slidechange', this._draw);
+  }
+  componentWillUnmount() { document.removeEventListener('slidechange', this._draw); }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
